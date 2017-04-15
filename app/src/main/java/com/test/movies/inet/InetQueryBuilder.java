@@ -13,13 +13,13 @@ import okhttp3.Request;
 
 public class InetQueryBuilder {
 
-    public final String MOVIE_BASE_URI = "";
-    public final String IMAGE_BASE_URI = "";
+    public static final String MOVIE_BASE_URI = "http://api.themoviedb.org/3/movie/";
+    public static final String IMAGE_BASE_URI = "https://image.tmdb.org/t/p/";
 
     public enum SortOrder{
 
-        POPULAR("/movie/popular"),
-        HIGHEST_RATED("/movie/top_rated");
+        POPULAR("popular"),
+        HIGHEST_RATED("top_rated");
 
         private String url;
 

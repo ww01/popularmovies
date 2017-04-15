@@ -1,10 +1,12 @@
 package com.test.movies.db.entity;
 
+
+
 /**
  * Created by waldek on 05.04.17.
  */
 
-public class Movie {
+public class Movie  {
 
     protected int id;
 
@@ -24,12 +26,13 @@ public class Movie {
 
     }
 
-    public Movie(String name, String image, String synopsis, double rating, boolean isFavourite){
+    public Movie(String name, String image, String synopsis, double rating, boolean isFavourite, int TMDBId){
         this.title = name;
         this.image = image;
         this.synopsis = synopsis;
         this.rating = rating;
         this.isFavourite = isFavourite;
+        this.TMDBId = TMDBId;
     }
 
     public int getId() {

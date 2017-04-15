@@ -15,11 +15,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         if(ConnectivityHelper.isNetworkAvailable(this)){
-            Picasso.with(this).setLoggingEnabled(true);
-            Picasso.with(this).load("http://i.imgur.com/DvpvklR.png").into((ImageView)this.findViewById(R.id.img1));
+           // Picasso.with(this).setLoggingEnabled(true);
+          //  Picasso.with(this).load("http://i.imgur.com/DvpvklR.png").into((ImageView)this.findViewById(R.id.img1));
             Log.d("NETWORK_STATE", "połączone");
         } else {
             Toast.makeText(this, "Sieć jest niedostępna.", Toast.LENGTH_SHORT).show();

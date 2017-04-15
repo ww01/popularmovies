@@ -1,5 +1,7 @@
 package com.test.movies.inet;
 
+import android.util.Log;
+
 import com.test.movies.db.entity.Movie;
 
 import org.json.JSONArray;
@@ -7,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -23,7 +27,7 @@ import okhttp3.ResponseBody;
 public class Communicator {
 
     public class JsonDecoder {
-        public HashSet<Movie> parseMovies(String string) throws JSONException {
+        public ArrayList<Movie> parseMovies(String string) throws JSONException {
             JSONObject object = new JSONObject(string);
 
             if(!object.has("results"))
@@ -32,8 +36,10 @@ public class Communicator {
             return this.moviesFromJson(object.getJSONArray("results"));
         }
 
-        protected HashSet<Movie> moviesFromJson(JSONArray jsonArray) throws JSONException {
-            HashSet<Movie> movies = new HashSet<Movie>();
+        protected ArrayList<Movie> moviesFromJson(JSONArray jsonArray) throws JSONException {
+            ArrayList<Movie> movies = new ArrayList<Movie>();
+
+            Log.d(this.getClass().getName(), "rozmiar tablicy json: " + jsonArray.length());
 
             for(int i =0; i < jsonArray.length(); i ++){
                 JSONObject object = jsonArray.getJSONObject(i);
@@ -55,6 +61,9 @@ public class Communicator {
                         case "id":
                             movie.setTMDBId(object.getInt(key));
                             break;
+                        case "poster_path":
+                            movie.setImage(object.getString(key));
+                            break;
                     }
                 }
 
@@ -73,10 +82,11 @@ public class Communicator {
         this.apiKey = apiKey;
     }
 
-    public HashSet<Movie> getMovies(int page, InetQueryBuilder.SortOrder sortOrder) throws IOException, JSONException {
+    public ArrayList<Movie> getMovies(int page, InetQueryBuilder.SortOrder sortOrder) throws IOException, JSONException {
 
         InetQueryBuilder inetQueryBuilder = new InetQueryBuilder(this.apiKey);
 
+        Log.d(this.getClass().getName(), new Request.Builder().url(inetQueryBuilder.getMoviesList(sortOrder, page)).build().toString());
 
         Response response = this.okHttpClient
                 .newCall(
