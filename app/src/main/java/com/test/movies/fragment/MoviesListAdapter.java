@@ -23,6 +23,8 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
 
     protected ArrayList<Movie> movies = new ArrayList<Movie>();
 
+    public static final String KEY = "NETWORK_MOVIES_LIST_ADAPTER";
+
     @Override
     public MoviesListFragment.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext())
@@ -61,6 +63,11 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
     public void addItems(ArrayList<Movie> movies) {
         this.movies.addAll(movies);
 
+        this.notifyDataSetChanged();
+    }
+
+    public void clearItems(){
+        this.movies.clear();
         this.notifyDataSetChanged();
     }
 }
