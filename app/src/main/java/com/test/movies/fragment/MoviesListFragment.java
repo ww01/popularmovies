@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -14,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
 import com.test.movies.db.entity.Movie;
 import com.test.movies.inet.Communicator;
 import com.test.movies.inet.InetQueryBuilder;
@@ -40,43 +37,9 @@ public class MoviesListFragment extends Fragment {
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.getAdapterPosition();
             this.poster = (ImageView) itemView.findViewById(R.id.tile_poster);
             this.title = (TextView) itemView.findViewById(R.id.tile_title);
-        }
-    }
-
-    public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.ViewHolder> {
-
-        protected ArrayList<Movie> movies = new ArrayList<Movie>();
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemLayoutView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.movie_tile, null);
-
-            return  new ViewHolder(itemLayoutView);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            if(position > this.movies.size())
-                return;
-            Movie movie = this.movies.get(position);
-            holder.title.setText(movie.getTitle());
-             //Log.d(this.getClass().getName(), InetQueryBuilder.IMAGE_BASE_URI+ "w500" + movie.getImage());
-
-            Picasso.with(holder.poster.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into(holder.poster);
-        }
-
-        @Override
-        public int getItemCount() {
-
-            return this.movies.size();
-        }
-
-        public void addItems(ArrayList<Movie>  movies){
-            this.movies.addAll(movies);
-
-            this.notifyDataSetChanged();
         }
     }
 
@@ -127,7 +90,7 @@ public class MoviesListFragment extends Fragment {
 
         protected void onPostExecute(ArrayList<Movie> movies){
             MoviesListFragment.this.adapter.addItems(movies);
-            Log.d("pobór danych","Liczba pobranych: " + movies.size());
+          //  Log.d("pobór danych","Liczba pobranych: " + movies.size());
         }
     }
 
@@ -138,22 +101,26 @@ public class MoviesListFragment extends Fragment {
         super.onCreate(savedState);
         this.adapter = new MoviesListAdapter();
 
-        MoviesAsyncTask task = new MoviesAsyncTask();
-        task.execute(new MoviesTaskConfig(this.getContext().getResources().getString(R.string.themoviedb_api_key),
-                InetQueryBuilder.SortOrder.HIGHEST_RATED));
+
+
 
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        MoviesAsyncTask task = new MoviesAsyncTask();
+        task.execute(new MoviesTaskConfig(this.getContext().getResources().getString(R.string.themoviedb_api_key),
+                InetQueryBuilder.SortOrder.HIGHEST_RATED));
         ViewGroup moviesListLayout = (ViewGroup) inflater.inflate(R.layout.movies_list, container, false);
 
         RecyclerView recyclerView = (RecyclerView) moviesListLayout.findViewById(R.id.posters_recycler);
         recyclerView.setAdapter(this.adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 2));
 
-        MoviesAsyncTask task = new MoviesAsyncTask();
-        task.execute(new MoviesTaskConfig(getResources().getString(R.string.themoviedb_api_key), InetQueryBuilder.SortOrder.HIGHEST_RATED));
+
+       // MoviesAsyncTask task = new MoviesAsyncTask();
+      //  task.execute(new MoviesTaskConfig(getResources().getString(R.string.themoviedb_api_key), InetQueryBuilder.SortOrder.HIGHEST_RATED));
 
 
         return moviesListLayout;
@@ -163,4 +130,6 @@ public class MoviesListFragment extends Fragment {
     public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
         super.onInflate(context, attrs, savedInstanceState);
     }
+
+   
 }

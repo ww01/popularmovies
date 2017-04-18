@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PopularMovies</string>
     <string name="menu_item1">Menu item 1</string>
+    <string name="rating_label">Rating</string>
 </resources>

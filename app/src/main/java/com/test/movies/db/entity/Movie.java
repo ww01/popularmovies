@@ -1,12 +1,18 @@
 package com.test.movies.db.entity;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 
 /**
  * Created by waldek on 05.04.17.
  */
 
-public class Movie  {
+public class Movie implements Parcelable {
+
+    public static final String KEY = "MOVIE";
 
     protected int id;
 
@@ -26,6 +32,17 @@ public class Movie  {
 
     }
 
+    public Movie(Parcel src){
+
+        this.id  = src.readInt();
+        this.TMDBId = src.readInt();
+        this.title = src.readString();
+        this.image = src.readString();
+        this.synopsis = src.readString();
+        this.isFavourite = src.readInt() > 0;
+        this.rating = src.readDouble();
+    }
+
     public Movie(String name, String image, String synopsis, double rating, boolean isFavourite, int TMDBId){
         this.title = name;
         this.image = image;
@@ -34,6 +51,18 @@ public class Movie  {
         this.isFavourite = isFavourite;
         this.TMDBId = TMDBId;
     }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -89,5 +118,21 @@ public class Movie  {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.TMDBId);
+        dest.writeString(this.title);
+        dest.writeString(this.image);
+        dest.writeString(this.synopsis);
+        dest.writeInt(this.isFavourite? 1:0);
+        dest.writeDouble(this.rating);
     }
 }
