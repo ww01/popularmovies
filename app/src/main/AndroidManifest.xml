@@ -9,12 +9,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
+<<<<<<< Updated upstream
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+=======
+        <activity android:title=".MainActivity">
+            <!--intent-filter>
+                <action android:title="android.intent.action.MAIN" />
+
+                <category android:title="android.intent.category.LAUNCHER" />
+            </intent-filter-->
+>>>>>>> Stashed changes
         </activity>
         <activity android:name=".MovieDetailActivity"></activity>
     </application>

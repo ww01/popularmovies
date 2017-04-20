@@ -28,6 +28,7 @@ class MoviesAsyncTask extends AsyncTask<MoviesListFragment.MoviesTaskConfig, Int
         Communicator communicator = new Communicator(params[0].getApiKey());
         try {
             movies = communicator.getMovies(params[0].getPage(), params[0].getSortOrder());
+
         } catch (IOException e) {
         } catch (JSONException e) {
         }
