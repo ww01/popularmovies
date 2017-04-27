@@ -33,9 +33,7 @@ public class MoviesAsyncTask extends AsyncTask<MoviesListFragment.MoviesTaskConf
             movies = communicator.getMovies(params[0].getPage(), params[0].getSortOrder());
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d("async_io", e.getCause().toString());
         } catch (JSONException e) {
-            Log.d("async_json", "błąd json");
         }
 
         return movies;

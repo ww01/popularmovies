@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(!(fragment instanceof MoviesListFragment))
             return false;
-        
+
         switch(item.getItemId()){
             case R.id.menu_sort_popular:
                 ((MoviesListFragment) fragment).changeSortOrder(InetQueryBuilder.SortOrder.POPULAR);

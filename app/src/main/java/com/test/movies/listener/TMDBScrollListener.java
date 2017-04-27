@@ -6,7 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.test.movies.helpers.ConnectivityHelper;
 import com.test.movies.task.MoviesAsyncTask;
 import com.test.movies.adapter.MoviesListAdapter;
 import com.test.movies.fragment.MoviesListFragment;
@@ -20,6 +22,8 @@ import com.test.popularmovies.R;
 public class TMDBScrollListener extends EndlessRecyclerViewScrollListener {
 
     public final int DEFAULT_START_PAGE = 2;
+
+    protected boolean networkAvailable = true;
 
     public static final String KEY = "TMDBScrollListener";
     protected final MoviesListAdapter adapter;
@@ -46,7 +50,10 @@ public class TMDBScrollListener extends EndlessRecyclerViewScrollListener {
 
     @Override
     public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-        Log.d("totalItemcount", String.valueOf(totalItemsCount));
+        if(!ConnectivityHelper.isNetworkAvailable(view.getContext())){
+            Toast.makeText(view.getContext(), R.string.no_network , Toast.LENGTH_LONG);
+            return;
+        }
         MoviesAsyncTask task = new MoviesAsyncTask();
         task.execute(new MoviesListFragment.MoviesTaskConfig(view.getContext().getResources().getString(R.string.themoviedb_api_key),
                 this.sortOrder, this.adapter, page));
@@ -60,10 +67,18 @@ public class TMDBScrollListener extends EndlessRecyclerViewScrollListener {
         this.sortOrder = sortOrder;
     }
 
-    public void loadInitialItems(Context context, int page, RecyclerView recyclerView){
+    public void loadInitialItems(Context context, int page){
+        if(!ConnectivityHelper.isNetworkAvailable(context)){
+            Toast.makeText(context, R.string.no_network , Toast.LENGTH_LONG);
+            return;
+        }
         MoviesAsyncTask task = new MoviesAsyncTask();
         task.execute(new MoviesListFragment.MoviesTaskConfig(context.getResources().getString(R.string.themoviedb_api_key),
                 this.sortOrder, this.adapter, page));
-       // this.mLayoutManager.scrollToPosition(2);
+
+
+
+
+       this.currentPage = page;
     }
 }

@@ -92,6 +92,7 @@ public class MoviesListFragment extends Fragment {
 
     protected TMDBScrollListener scrollListener;
     protected RecyclerView recyclerView;
+    protected int startPage = 1;
 
     @Override
     public void onCreate(Bundle savedState) {
@@ -101,9 +102,6 @@ public class MoviesListFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-
 
         ViewGroup moviesListLayout = (ViewGroup) inflater.inflate(R.layout.movies_list, container, false);
 
@@ -119,8 +117,10 @@ public class MoviesListFragment extends Fragment {
             recyclerView.addOnScrollListener(this.scrollListener);
         }
 
+        if(this.adapter.getItemCount() == 0 ) {
+            this.scrollListener.loadInitialItems(this.getContext(), this.startPage);
+        }
 
-     //   this.scrollListener.onLoadMore(1, 1, this.recyclerView);
 
         return moviesListLayout;
     }
@@ -149,18 +149,16 @@ public class MoviesListFragment extends Fragment {
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        Log.d("menu_item", "wywołanie menu z wnętrza fragmentu");
-        return super.onOptionsItemSelected(item);
-    }
-
     public void changeSortOrder(InetQueryBuilder.SortOrder sortOrder){
         if(this.adapter != null && this.scrollListener != null){
             this.adapter.clearItems();
             this.scrollListener.setSortOrder(sortOrder);
-            //this.scrollListener.loadInitialItems(this.getContext(), 1, this.recyclerView);
-            this.scrollListener.onLoadMore(1, 1, this.recyclerView);
+            this.scrollListener.resetState();
+            if(this.adapter.getItemCount() == 0){
+                this.scrollListener.loadInitialItems(this.getContext(), this.startPage);
+
+            }
+
         }
     }
 }
