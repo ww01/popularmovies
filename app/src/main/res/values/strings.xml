@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
-    <string name="menu_item1">Menu item 1</string>
+    <string name="app_name">Popular Movies</string>
+    <string name="menu_sorting">Sorting order</string>
+    <string name="menu_sort_top_rated">Top rated</string>
+    <string name="menu_sort_most_popular">Popular</string>
     <string name="rating_label">Rating</string>
 </resources>

@@ -1,8 +1,11 @@
-package com.test.movies.fragment;
+package com.test.movies.task;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.test.movies.db.entity.Movie;
+import com.test.movies.adapter.MoviesListAdapter;
+import com.test.movies.fragment.MoviesListFragment;
 import com.test.movies.inet.Communicator;
 
 import org.json.JSONException;
@@ -13,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by waldek on 18.04.17.
  */
-class MoviesAsyncTask extends AsyncTask<MoviesListFragment.MoviesTaskConfig, Integer, ArrayList<Movie>> {
+public class MoviesAsyncTask extends AsyncTask<MoviesListFragment.MoviesTaskConfig, Integer, ArrayList<Movie>> {
 
     protected MoviesListAdapter adapter;
 
@@ -28,18 +31,20 @@ class MoviesAsyncTask extends AsyncTask<MoviesListFragment.MoviesTaskConfig, Int
         Communicator communicator = new Communicator(params[0].getApiKey());
         try {
             movies = communicator.getMovies(params[0].getPage(), params[0].getSortOrder());
-
         } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("async_io", e.getCause().toString());
         } catch (JSONException e) {
+            Log.d("async_json", "błąd json");
         }
-
 
         return movies;
     }
 
 
+
     protected void onPostExecute(ArrayList<Movie> movies) {
         this.adapter.addItems(movies);
-        //  Log.d("pobór danych","Liczba pobranych: " + movies.size());
+
     }
 }

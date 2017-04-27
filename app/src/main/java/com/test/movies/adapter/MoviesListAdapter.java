@@ -1,15 +1,16 @@
-package com.test.movies.fragment;
+package com.test.movies.adapter;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.test.movies.db.entity.Movie;
+import com.test.movies.fragment.MoviesListFragment;
 import com.test.movies.inet.InetQueryBuilder;
 import com.test.popularmovies.MovieDetailActivity;
 import com.test.popularmovies.R;
@@ -27,6 +28,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
 
     @Override
     public MoviesListFragment.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movie_tile, null);
 
@@ -34,14 +36,13 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
     }
 
     @Override
-    public void onBindViewHolder(MoviesListFragment.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final MoviesListFragment.ViewHolder holder, final int position) {
         if (position > this.movies.size())
             return;
+        holder.itemView.setVisibility(View.GONE);
         final Context ctx = holder.itemView.getContext();
         final Movie movie = this.movies.get(position);
-        Log.d(this.getClass().getSimpleName(), this.movies.get(position).getTitle());
         holder.title.setText(movie.getTitle());
-        //Log.d(this.getClass().getName(), InetQueryBuilder.IMAGE_BASE_URI+ "w500" + movie.getImage());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +52,18 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
             }
         });
 
-        Picasso.with(holder.poster.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into(holder.poster);
+        Picasso.with(holder.poster.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into(holder.poster, new Callback() {
+            @Override
+            public void onSuccess() {
+                holder.itemView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+
     }
 
     @Override
@@ -66,8 +78,21 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
         this.notifyDataSetChanged();
     }
 
+    public void addItem(Movie movie){
+        this.movies.add(movie);
+        this.notifyDataSetChanged();
+    }
+
     public void clearItems(){
         this.movies.clear();
         this.notifyDataSetChanged();
+    }
+
+    public ArrayList<Movie> getMovies(){
+        return this.movies;
+    }
+
+    public void setMovies(ArrayList<Movie> movies){
+        this.movies = movies;
     }
 }

@@ -6,13 +6,19 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.test.movies.adapter.MoviesListAdapter;
+import com.test.movies.db.entity.Movie;
 import com.test.movies.inet.InetQueryBuilder;
+import com.test.movies.listener.TMDBScrollListener;
+import com.test.movies.task.MoviesAsyncTask;
 import com.test.popularmovies.R;
 
 /**
@@ -84,29 +90,37 @@ public class MoviesListFragment extends Fragment {
 
     private MoviesListAdapter adapter;
 
+    protected TMDBScrollListener scrollListener;
+    protected RecyclerView recyclerView;
+
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
         this.adapter = new MoviesListAdapter();
-
-
-
-
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        MoviesAsyncTask task = new MoviesAsyncTask();
-        task.execute(new MoviesTaskConfig(this.getContext().getResources().getString(R.string.themoviedb_api_key),
-                InetQueryBuilder.SortOrder.HIGHEST_RATED, this.adapter, 1));
+
+
+
         ViewGroup moviesListLayout = (ViewGroup) inflater.inflate(R.layout.movies_list, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) moviesListLayout.findViewById(R.id.posters_recycler);
+        recyclerView = (RecyclerView) moviesListLayout.findViewById(R.id.posters_recycler);
         recyclerView.setAdapter(this.adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addOnScrollListener(new TMDBScrollListener(layoutManager, this.adapter));
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(TMDBScrollListener.KEY) && savedInstanceState.getSerializable(TMDBScrollListener.KEY) instanceof InetQueryBuilder.SortOrder){
+            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, (InetQueryBuilder.SortOrder) savedInstanceState.getSerializable(TMDBScrollListener.KEY));
+        } else {
+            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, InetQueryBuilder.SortOrder.HIGHEST_RATED);
+            recyclerView.addOnScrollListener(this.scrollListener);
+        }
+
+
+     //   this.scrollListener.onLoadMore(1, 1, this.recyclerView);
 
         return moviesListLayout;
     }
@@ -119,7 +133,34 @@ public class MoviesListFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle bundle){
         super.onSaveInstanceState(bundle);
-        bundle.putParcelableArrayList(MoviesListAdapter.KEY, this.adapter.movies);
+        bundle.putParcelableArrayList(MoviesListAdapter.KEY, this.adapter.getMovies());
+        if(this.scrollListener != null)
+            bundle.putSerializable(TMDBScrollListener.KEY, this.scrollListener.getSortOrder());
+    }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(MoviesListAdapter.KEY)){
+            this.adapter.addItems(savedInstanceState.<Movie>getParcelableArrayList(MoviesListAdapter.KEY));
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Log.d("menu_item", "wywołanie menu z wnętrza fragmentu");
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void changeSortOrder(InetQueryBuilder.SortOrder sortOrder){
+        if(this.adapter != null && this.scrollListener != null){
+            this.adapter.clearItems();
+            this.scrollListener.setSortOrder(sortOrder);
+            //this.scrollListener.loadInitialItems(this.getContext(), 1, this.recyclerView);
+            this.scrollListener.onLoadMore(1, 1, this.recyclerView);
+        }
     }
 }

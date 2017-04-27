@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#345672</color>
+    <color name="colorPrimaryDark">#244662</color>
+    <color name="colorAccent">#EF526C</color>
     <color name="colorTileTitle">#FFFFFF</color>
-    <color name="colorTileBackground">#444444</color>
+    <color name="appBackground">#BEBEBE</color>
+    <color name="colorTileBackground">@color/appBackground</color>
+
 </resources>

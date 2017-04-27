@@ -1,14 +1,17 @@
 package com.test.popularmovies;
 
+import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.ImageView;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import com.test.movies.adapter.MoviesListAdapter;
+import com.test.movies.fragment.MoviesListFragment;
 import com.test.movies.helpers.ConnectivityHelper;
+import com.test.movies.inet.InetQueryBuilder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,18 +19,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(ConnectivityHelper.isNetworkAvailable(this)){
-           // Picasso.with(this).setLoggingEnabled(true);
-          //  Picasso.with(this).load("http://i.imgur.com/DvpvklR.png").into((ImageView)this.findViewById(R.id.img1));
-            Log.d("NETWORK_STATE", "połączone");
-        } else {
-            Toast.makeText(this, "Sieć jest niedostępna.", Toast.LENGTH_SHORT).show();
-            Log.d("NETWORK_STATE", "brak połączenia");
-        }
-
-
-
-        //GridLayout gl = (GridLayout) this.findViewById(R.layout.);
     }
 
     @Override
@@ -35,4 +26,30 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.movies_list_fragment);
+
+        if(!(fragment instanceof MoviesListFragment))
+            return false;
+        
+        switch(item.getItemId()){
+            case R.id.menu_sort_popular:
+                ((MoviesListFragment) fragment).changeSortOrder(InetQueryBuilder.SortOrder.POPULAR);
+                break;
+            case R.id.menu_sort_top_rated:
+                ((MoviesListFragment) fragment).changeSortOrder(InetQueryBuilder.SortOrder.HIGHEST_RATED);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle bundle){
+        super.onSaveInstanceState(bundle);
+        getFragmentManager().putFragment(bundle, "moviesList", getFragmentManager().findFragmentById(R.id.movies_list_fragment));
+    }
+
 }

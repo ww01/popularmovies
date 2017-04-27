@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.test.popularmovies.MainActivity"
     android:id="@+id/master_id"
+    android:background="@color/appBackground"
     >
 
 

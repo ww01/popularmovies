@@ -7,11 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.test.movies.db.entity.Movie;
+import com.test.movies.inet.InetQueryBuilder;
 import com.test.popularmovies.R;
 
 
@@ -35,7 +37,7 @@ public class MovieDetailsFragment extends Fragment {
            Movie movie = (Movie) savedArg.getParcelable(Movie.KEY);
            ((TextView)layout.findViewById(R.id.detail_title)).setText(movie.getTitle());
            Log.d(this.getClass().getSimpleName(), (String) ((TextView)layout.findViewById(R.id.detail_title)).getText());
-           //Picasso.with(this.getContext()).load();
+           Picasso.with(this.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into((ImageView)layout.findViewById(R.id.detail_poster));
            TextView rating = (TextView)layout.findViewById(R.id.detail_rating);
            rating.setText(rating.getText() + ": " + movie.getRating());
            ((TextView)layout.findViewById(R.id.detail_details)).setText(movie.getSynopsis());
