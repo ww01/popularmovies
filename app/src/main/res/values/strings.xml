@@ -5,4 +5,8 @@
     <string name="menu_sort_most_popular">Popular</string>
     <string name="rating_label">Rating</string>
     <string name="no_network">Network connection is unavailable</string>
+    <string name="user_reviews">User reviews</string>
+    <string name="no_user_reviews">No reviews yet.</string>
+    <string name="trailers">Trailers</string>
+    <string name="no_trailers">No trailers at this time.</string>
 </resources>

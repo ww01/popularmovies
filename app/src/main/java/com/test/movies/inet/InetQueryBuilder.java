@@ -37,18 +37,29 @@ public class InetQueryBuilder {
 
     public InetQueryBuilder(String apiKey){
         if(apiKey == null || apiKey.length() == 0)
-            throw new IllegalArgumentException("Błędny klucz API");
+            throw new IllegalArgumentException("Invalid API key");
 
         this.apiKey = apiKey;
     }
 
     public URL getMoviesList(SortOrder sortOrder, int page) throws MalformedURLException {
         if(page < 0)
-            throw new IllegalArgumentException("Numer strony powinien być wartością nieujemną.");
+            throw new IllegalArgumentException("Page number should not be negative.");
 
         Uri uri = Uri.parse(this.MOVIE_BASE_URI + sortOrder.getUrl())
                 .buildUpon().appendQueryParameter("api_key", this.apiKey).appendQueryParameter("page", String.valueOf(page)).build();
         return new URL(uri.toString());
+    }
+
+    public URL getMovieReviews(int movieId, int page) throws MalformedURLException{
+        return new URL(
+                Uri.parse(InetQueryBuilder.MOVIE_BASE_URI).buildUpon()
+                        .appendQueryParameter("api_key", this.apiKey)
+                        .appendPath(String.valueOf(movieId))
+                        .appendPath("reviews")
+                        .appendQueryParameter("page", String.valueOf(page))
+                        .build().toString()
+        );
     }
 
 }
