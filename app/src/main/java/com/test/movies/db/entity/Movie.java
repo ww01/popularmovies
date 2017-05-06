@@ -4,13 +4,19 @@ package com.test.movies.db.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.io.Serializable;
 
 /**
  * Created by waldek on 05.04.17.
  */
 
+@DatabaseTable
 public class Movie implements Parcelable {
+
+    public static final String MOVIE_TABLE_NAME = "movie"
+    public static final String MOVIE_id = "id";
 
     public static final String KEY = "MOVIE";
 

@@ -3,6 +3,7 @@ package com.test.movies.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,7 +46,7 @@ public class MovieDetailsFragment extends Fragment {
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState){
 
 
-       ScrollView layout = (ScrollView) inflater.inflate(R.layout.movie_detail, container, false);
+       NestedScrollView layout = (NestedScrollView) inflater.inflate(R.layout.movie_detail, container, false);
        // Log.d(this.getClass().getSimpleName(), String.valueOf(getArguments().getSerializable(Movie.KEY) instanceof Movie));
         //Log.d(this.getClass().getSimpleName(), String.valueOf(savedState==null));
         Bundle savedArg = this.getArguments();
