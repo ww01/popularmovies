@@ -15,7 +15,7 @@ import java.io.Serializable;
 @DatabaseTable
 public class Movie implements Parcelable {
 
-    public static final String MOVIE_TABLE_NAME = "movie"
+    public static final String MOVIE_TABLE_NAME = "movie";
     public static final String MOVIE_id = "id";
 
     public static final String KEY = "MOVIE";

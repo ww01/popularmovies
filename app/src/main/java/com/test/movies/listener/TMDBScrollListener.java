@@ -8,10 +8,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.test.movies.task.MoviesTaskConfig;
 import com.test.movies.helpers.ConnectivityHelper;
 import com.test.movies.task.MoviesAsyncTask;
 import com.test.movies.adapter.MoviesListAdapter;
-import com.test.movies.fragment.MoviesListFragment;
 import com.test.movies.inet.InetQueryBuilder;
 import com.test.popularmovies.R;
 
@@ -26,6 +26,7 @@ public class TMDBScrollListener extends EndlessRecyclerViewScrollListener {
     protected boolean networkAvailable = true;
 
     public static final String KEY = "TMDBScrollListener";
+    public static final String PAGE_KEY = "TMDBScrollListenerPage";
     protected final MoviesListAdapter adapter;
     protected InetQueryBuilder.SortOrder sortOrder;
 
@@ -54,8 +55,9 @@ public class TMDBScrollListener extends EndlessRecyclerViewScrollListener {
             Toast.makeText(view.getContext(), R.string.no_network , Toast.LENGTH_LONG);
             return;
         }
+
         MoviesAsyncTask task = new MoviesAsyncTask();
-        task.execute(new MoviesListFragment.MoviesTaskConfig(view.getContext().getResources().getString(R.string.themoviedb_api_key),
+        task.execute(new MoviesTaskConfig(view.getContext().getResources().getString(R.string.themoviedb_api_key),
                 this.sortOrder, this.adapter, page));
     }
 
@@ -73,11 +75,8 @@ public class TMDBScrollListener extends EndlessRecyclerViewScrollListener {
             return;
         }
         MoviesAsyncTask task = new MoviesAsyncTask();
-        task.execute(new MoviesListFragment.MoviesTaskConfig(context.getResources().getString(R.string.themoviedb_api_key),
+        task.execute(new MoviesTaskConfig(context.getResources().getString(R.string.themoviedb_api_key),
                 this.sortOrder, this.adapter, page));
-
-
-
 
        this.currentPage = page;
     }

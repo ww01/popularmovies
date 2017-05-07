@@ -40,54 +40,6 @@ public class MoviesListFragment extends Fragment {
         }
     }
 
-    public static class MoviesTaskConfig {
-        private String apiKey;
-        private InetQueryBuilder.SortOrder sortOrder;
-        private MoviesListAdapter adapter;
-        private int page;
-
-        public MoviesTaskConfig(String apiKey, InetQueryBuilder.SortOrder sortOrder, MoviesListAdapter adapter, int page) {
-            this.apiKey = apiKey;
-            this.sortOrder = sortOrder;
-            this.adapter = adapter;
-            if(this.page < 0)
-                throw new IllegalArgumentException("Page numbers should not be negative");
-            this.page = page;
-        }
-
-        public String getApiKey() {
-            return apiKey;
-        }
-
-        public void setApiKey(String apiKey) {
-            this.apiKey = apiKey;
-        }
-
-        public InetQueryBuilder.SortOrder getSortOrder() {
-            return sortOrder;
-        }
-
-        public void setSortOrder(InetQueryBuilder.SortOrder sortOrder) {
-            this.sortOrder = sortOrder;
-        }
-
-        public MoviesListAdapter getAdapter() {
-            return adapter;
-        }
-
-        public void setAdapter(MoviesListAdapter adapter) {
-            this.adapter = adapter;
-        }
-
-        public int getPage() {
-            return page;
-        }
-
-        public void setPage(int page) {
-            this.page = page;
-        }
-    }
-
     private MoviesListAdapter adapter;
 
     protected TMDBScrollListener scrollListener;
@@ -98,6 +50,9 @@ public class MoviesListFragment extends Fragment {
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
         this.adapter = new MoviesListAdapter();
+        if(savedState != null && savedState.containsKey(MoviesListAdapter.KEY)){
+            this.adapter.addItems(savedState.<Movie>getParcelableArrayList(MoviesListAdapter.KEY));
+        }
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,12 +65,17 @@ public class MoviesListFragment extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
 
+
         if(savedInstanceState != null && savedInstanceState.containsKey(TMDBScrollListener.KEY) && savedInstanceState.getSerializable(TMDBScrollListener.KEY) instanceof InetQueryBuilder.SortOrder){
             this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, (InetQueryBuilder.SortOrder) savedInstanceState.getSerializable(TMDBScrollListener.KEY));
         } else {
             this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, InetQueryBuilder.SortOrder.HIGHEST_RATED);
-            recyclerView.addOnScrollListener(this.scrollListener);
         }
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(TMDBScrollListener.PAGE_KEY))
+            this.scrollListener.setCurrentPage(savedInstanceState.getInt(TMDBScrollListener.PAGE_KEY));
+
+        recyclerView.addOnScrollListener(this.scrollListener);
 
         if(this.adapter.getItemCount() == 0 ) {
             this.scrollListener.loadInitialItems(this.getContext(), this.startPage);
@@ -134,18 +94,17 @@ public class MoviesListFragment extends Fragment {
     public void onSaveInstanceState(Bundle bundle){
         super.onSaveInstanceState(bundle);
         bundle.putParcelableArrayList(MoviesListAdapter.KEY, this.adapter.getMovies());
-        if(this.scrollListener != null)
+        if(this.scrollListener != null) {
             bundle.putSerializable(TMDBScrollListener.KEY, this.scrollListener.getSortOrder());
+            bundle.putInt(TMDBScrollListener.PAGE_KEY, this.scrollListener.getCurrentPage());
+        }
+
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
-        if(savedInstanceState != null && savedInstanceState.containsKey(MoviesListAdapter.KEY)){
-            this.adapter.addItems(savedInstanceState.<Movie>getParcelableArrayList(MoviesListAdapter.KEY));
-        }
     }
 
 
