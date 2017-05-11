@@ -52,6 +52,7 @@ public class MovieContentProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         String type;
         switch(URI_MATCHER.match(uri)){
+            case MARKED_MOVIE_ADD:
             case MARKED_MOVIES:
                 type = "vnd.android.cursor.dir/com.test.movies.db.entity.Movie";
             break;

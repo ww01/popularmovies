@@ -43,19 +43,6 @@ public class MovieReviewsAdapter extends RecyclerView.Adapter<MovieDetailsFragme
     public void onBindViewHolder(MovieDetailsFragment.MovieReviewViewHolder holder, int position) {
         if(holder == null || holder.itemView == null)
             return;
-        final Context context = holder.itemView.getContext();
-
-        if(position > this.reviews.size() || this.reviews.size() == 0) {
-            ViewGroup parent = (ViewGroup) holder.itemView.getParent().getParent();
-            parent.removeView(parent.findViewById(R.id.details_reviews_card));
-
-            TextView textView = new TextView(context);
-            textView.setText(context.getText(R.string.no_user_reviews));
-            parent.addView(textView);
-            return;
-        }
-
-
         Review review = this.reviews.get(position);
         holder.author.setText(review.getAuthor());
         holder.content.setText(review.getContent());

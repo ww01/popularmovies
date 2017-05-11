@@ -53,15 +53,7 @@ public class Review implements Parcelable, IEntity {
 
     }
 
-    @Override
-    public ContentValues toContentValues(Object entity) {
-        return null;
-    }
 
-    @Override
-    public Object fromContentValues(ContentValues contentValues) {
-        return null;
-    }
 
     public int getId() {
         return id;

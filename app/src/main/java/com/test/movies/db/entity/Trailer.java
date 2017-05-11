@@ -49,15 +49,7 @@ public class Trailer implements IEntity {
         this.type = type;
     }
 
-    @Override
-    public ContentValues toContentValues(Object entity) {
-        return null;
-    }
 
-    @Override
-    public Object fromContentValues(ContentValues contentValues) {
-        return null;
-    }
 
     public int getId() {
         return id;
