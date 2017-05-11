@@ -3,7 +3,7 @@
     <color name="colorPrimary">#345672</color>
     <color name="colorPrimaryDark">#244662</color>
     <color name="colorAccent">#EF526C</color>
-    <color name="colorTileTitle">#FFFFFF</color>
+    <color name="colorTileTitle">#222222</color>
     <color name="appBackground">#BEBEBE</color>
     <color name="colorTileBackground">@color/appBackground</color>
 

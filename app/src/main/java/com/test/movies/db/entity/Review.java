@@ -1,5 +1,6 @@
 package com.test.movies.db.entity;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,7 +8,7 @@ import android.os.Parcelable;
  * Created by waldek on 03.05.17.
  */
 
-public class Review implements Parcelable {
+public class Review implements Parcelable, IEntity {
 
     protected int id;
 
@@ -50,6 +51,16 @@ public class Review implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+    }
+
+    @Override
+    public ContentValues toContentValues(Object entity) {
+        return null;
+    }
+
+    @Override
+    public Object fromContentValues(ContentValues contentValues) {
+        return null;
     }
 
     public int getId() {

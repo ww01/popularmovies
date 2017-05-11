@@ -1,26 +1,29 @@
 package com.test.movies.db.entity;
 
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.j256.ormlite.table.DatabaseTable;
+import com.test.movies.db.contract.PopularMoviesContract;
 
-import java.io.Serializable;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * Created by waldek on 05.04.17.
  */
 
-@DatabaseTable
-public class Movie implements Parcelable {
+@Entity
+public class Movie implements Parcelable, IEntity<Movie> {
 
-    public static final String MOVIE_TABLE_NAME = "movie";
-    public static final String MOVIE_id = "id";
 
+    @Transient
     public static final String KEY = "MOVIE";
 
-    protected int id;
+
+    protected long id;
 
     protected int TMDBId; // The Movie DataBase ID
 
@@ -40,7 +43,7 @@ public class Movie implements Parcelable {
 
     public Movie(Parcel src){
 
-        this.id  = src.readInt();
+        this.id  = src.readLong();
         this.TMDBId = src.readInt();
         this.title = src.readString();
         this.image = src.readString();
@@ -58,6 +61,18 @@ public class Movie implements Parcelable {
         this.TMDBId = TMDBId;
     }
 
+    @Generated(hash = 1409911408)
+    public Movie(long id, int TMDBId, String title, String image, String synopsis, boolean isFavourite,
+            double rating) {
+        this.id = id;
+        this.TMDBId = TMDBId;
+        this.title = title;
+        this.image = image;
+        this.synopsis = synopsis;
+        this.isFavourite = isFavourite;
+        this.rating = rating;
+    }
+
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel in) {
@@ -70,11 +85,65 @@ public class Movie implements Parcelable {
         }
     };
 
-    public int getId() {
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeInt(this.TMDBId);
+        dest.writeString(this.title);
+        dest.writeString(this.image);
+        dest.writeString(this.synopsis);
+        dest.writeInt(this.isFavourite? 1:0);
+        dest.writeDouble(this.rating);
+    }
+
+
+
+    public static final IContentValuesCreator<Movie> CONTENT_VALUES_CREATOR = new IContentValuesCreator<Movie>() {
+
+        @Override
+        public ContentValues toContentValues(Movie entity) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(PopularMoviesContract.Movie.TMDB_ID, entity.getTMDBId());
+            contentValues.put(PopularMoviesContract.Movie.IMAGE, entity.getImage());
+            contentValues.put(PopularMoviesContract.Movie.IS_FAVOURITE, entity.getIsFavourite());
+            contentValues.put(PopularMoviesContract.Movie.RATING, entity.getRating());
+            contentValues.put(PopularMoviesContract.Movie.SYNOPSIS, entity.getSynopsis());
+            contentValues.put(PopularMoviesContract.Movie.TITLE, entity.getTitle());
+
+            return contentValues;
+        }
+
+        @Override
+        public Movie fromContentValues(ContentValues contentValues) {
+            //Movie(String name, String image, String synopsis, double rating, boolean isFavourite, int TMDBId)
+            Movie movie = new Movie(
+                    contentValues.getAsString(PopularMoviesContract.Movie.TITLE),
+                    contentValues.getAsString(PopularMoviesContract.Movie.IMAGE),
+                    contentValues.getAsString(PopularMoviesContract.Movie.SYNOPSIS),
+                    contentValues.getAsDouble(PopularMoviesContract.Movie.RATING),
+                    contentValues.getAsBoolean(PopularMoviesContract.Movie.IS_FAVOURITE),
+                    contentValues.getAsInteger(PopularMoviesContract.Movie.TMDB_ID)
+            );
+
+            return movie;
+        }
+    };
+
+
+
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -126,19 +195,12 @@ public class Movie implements Parcelable {
         this.rating = rating;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+
+    public boolean getIsFavourite() {
+        return this.isFavourite;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
-        dest.writeInt(this.TMDBId);
-        dest.writeString(this.title);
-        dest.writeString(this.image);
-        dest.writeString(this.synopsis);
-        dest.writeInt(this.isFavourite? 1:0);
-        dest.writeDouble(this.rating);
+    public void setIsFavourite(boolean isFavourite) {
+        this.isFavourite = isFavourite;
     }
 }

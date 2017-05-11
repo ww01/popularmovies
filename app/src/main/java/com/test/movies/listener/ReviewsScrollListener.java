@@ -48,10 +48,10 @@ public class ReviewsScrollListener extends EndlessRecyclerViewScrollListener {
 
         MovieReviewsAsyncTask reviewsAsyncTask = new MovieReviewsAsyncTask();
         reviewsAsyncTask.execute(new MovieReviewsAsyncTask.MovieReviewsAsyncTaskConfig(view.getContext().getResources().getString(R.string.themoviedb_api_key),
-                this.movieId, page, this.reviewsAdapter));
+                this.movieId, page, this.reviewsAdapter, view));
     }
 
-    public void loadInitialItems(Context context, int page){
+    public void loadInitialItems(Context context, int page, RecyclerView view){
         if(!ConnectivityHelper.isNetworkAvailable(context)){
             Toast.makeText(context, R.string.no_network , Toast.LENGTH_LONG);
             return;
@@ -60,6 +60,6 @@ public class ReviewsScrollListener extends EndlessRecyclerViewScrollListener {
         this.currentPage = page;
         MovieReviewsAsyncTask reviewsAsyncTask = new MovieReviewsAsyncTask();
         reviewsAsyncTask.execute(new MovieReviewsAsyncTask.MovieReviewsAsyncTaskConfig(context.getResources().getString(R.string.themoviedb_api_key),
-                this.movieId, 1, this.reviewsAdapter));
+                this.movieId, 1, this.reviewsAdapter, view));
     }
 }

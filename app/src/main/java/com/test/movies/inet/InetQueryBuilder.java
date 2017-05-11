@@ -13,8 +13,10 @@ import okhttp3.Request;
 
 public class InetQueryBuilder {
 
+
     public static final String MOVIE_BASE_URI = "http://api.themoviedb.org/3/movie/";
     public static final String IMAGE_BASE_URI = "https://image.tmdb.org/t/p/";
+    private static final String YOUTUBE_THUMB_PATH = "https://img.youtube.com/vi/";
 
     public enum SortOrder{
 
@@ -60,6 +62,20 @@ public class InetQueryBuilder {
                         .appendQueryParameter("page", String.valueOf(page))
                         .build().toString()
         );
+    }
+
+    public URL getMovieTrailers(int movieId) throws MalformedURLException{
+        return new URL(
+                Uri.parse(InetQueryBuilder.MOVIE_BASE_URI).buildUpon()
+                .appendQueryParameter("api_key", this.apiKey)
+                .appendPath(String.valueOf(movieId))
+                .appendPath("videos").build().toString()
+        );
+    }
+
+    public static String getYoutubeThumbPath(String movieId){
+        return Uri.parse(InetQueryBuilder.YOUTUBE_THUMB_PATH).buildUpon()
+                .appendPath(movieId).appendPath("hqdefault.jpg").build().toString();
     }
 
 }
