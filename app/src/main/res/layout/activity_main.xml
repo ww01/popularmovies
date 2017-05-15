@@ -10,15 +10,20 @@
     >
 
 
+        <android.support.v4.view.ViewPager
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/main_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        <fragment
+        <!--fragment
             android:name="com.test.movies.fragment.MoviesListFragment"
             android:id="@+id/movies_list_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
-        </fragment>
+        </fragment-->
 
 
 

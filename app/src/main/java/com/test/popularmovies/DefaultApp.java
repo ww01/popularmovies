@@ -35,6 +35,13 @@ public class DefaultApp extends Application {
     }
 
     public DaoSession getDaoSession() {
-        return daoSession;
+
+        if(this.daoSession == null){
+            DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "popular_movies");
+            Database database = helper.getWritableDb();
+            this.daoSession = new DaoMaster(database).newSession();
+        }
+
+        return this.daoSession;
     }
 }

@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.test.movies.adapter.MoviesListAdapter;
 import com.test.movies.db.entity.Movie;
+import com.test.movies.helpers.ConnectivityHelper;
 import com.test.movies.inet.InetQueryBuilder;
 import com.test.movies.listener.TMDBScrollListener;
 import com.test.movies.task.MoviesAsyncTask;
@@ -25,7 +27,7 @@ import com.test.popularmovies.R;
  * Created by waldek on 07.04.17.
  */
 
-public class MoviesListFragment extends Fragment {
+public class MoviesListFragment extends android.support.v4.app.Fragment {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -109,7 +111,7 @@ public class MoviesListFragment extends Fragment {
 
 
     public void changeSortOrder(InetQueryBuilder.SortOrder sortOrder){
-        if(this.adapter != null && this.scrollListener != null){
+        if(ConnectivityHelper.isNetworkAvailableMsg(this.getContext()) && this.adapter != null && this.scrollListener != null){
             this.adapter.clearItems();
             this.scrollListener.setSortOrder(sortOrder);
             this.scrollListener.resetState();
@@ -117,7 +119,8 @@ public class MoviesListFragment extends Fragment {
                 this.scrollListener.loadInitialItems(this.getContext(), this.startPage);
 
             }
-
         }
     }
+
+
 }

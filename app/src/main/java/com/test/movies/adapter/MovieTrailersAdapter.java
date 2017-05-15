@@ -49,14 +49,14 @@ public class MovieTrailersAdapter extends RecyclerView.Adapter<MovieDetailsFragm
 
         final Context context = holder.itemView.getContext();
 
-        if(position > this.trailers.size() || this.trailers.size() == 0){
+        /*if(position > this.trailers.size() || this.trailers.size() == 0){
             TextView textView = new TextView(context);
             textView.setText(context.getText(R.string.no_trailers));
             ViewGroup parentContainer = (ViewGroup) holder.itemView.getParent().getParent();
             (parentContainer).addView(textView);
             parentContainer.removeView(parentContainer.findViewById(R.id.details_trailers_list));
             return;
-        }
+        }*/
 
         final Trailer trailer = this.trailers.get(position);
         holder.itemView.setVisibility(View.GONE);

@@ -76,13 +76,11 @@ public class MovieReviewsAsyncTask extends AsyncTask<MovieReviewsAsyncTask.Movie
             textView.setText(parent.getContext().getText(R.string.no_user_reviews));
             parent.addView(textView);
 
+            if(this.config.recyclerView.getParent() != null)
+             ((ViewGroup)this.config.recyclerView.getParent()).removeView(this.config.recyclerView);
             return;
         }
 
-        if(reviews.size() == 0){
-            ((ViewGroup)this.config.recyclerView.getParent()).removeView(this.config.recyclerView);
-            return;
-        }
 
         this.config.adapter.addReviews(reviews);
     }

@@ -9,4 +9,8 @@
     <string name="no_user_reviews">No reviews yet.</string>
     <string name="trailers">Trailers</string>
     <string name="no_trailers">No trailers at this time.</string>
+    <string name="movie_faved">Movie has been added to your favourites.</string>
+    <string name="movie_unfaved">Movie has been removed from your favourites.</string>
+    <string name="view_pager_tab_popular">Popular</string>
+    <string name="view_pager_tab_favourite">Favourite</string>
 </resources>

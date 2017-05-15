@@ -22,14 +22,46 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
-                <TextView
-                    android:id="@+id/detail_title"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorTileTitle"
-                    android:paddingBottom="10dp"
-                    android:textSize="18sp"
-                    />
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/detail_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="8"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTileTitle"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        />
+
+                    <LinearLayout
+                        android:id="@+id/detail_favourite"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/movie_favourite"
+                            android:gravity="center"
+                            android:text="+"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="20sp"
+                            android:paddingTop="3sp"
+                            android:paddingBottom="3sp"
+                            android:paddingRight="10sp"
+                            android:paddingLeft="10sp"
+                            android:layout_marginTop="5dp"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
 
                 <ImageView
                     android:id="@+id/detail_poster"
@@ -70,10 +102,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/trailers"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/colorTileTitle"
                 android:paddingBottom="10dp"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 />
 
             <LinearLayout
@@ -107,6 +137,13 @@
                 >
 
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_reviews"
+                    android:textSize="15sp"
+                    android:paddingBottom="10sp"
+                    />
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/details_reviews_card"
@@ -116,17 +153,25 @@
                     android:padding="5dp"
                     >
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/details_reviews_list"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:nestedScrollingEnabled="false"
-                        android:padding="5dp"
-
                         >
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/details_reviews_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:nestedScrollingEnabled="false"
+                            android:padding="5dp"
 
-                    </android.support.v7.widget.RecyclerView>
+                            >
+
+                        </android.support.v7.widget.RecyclerView>
+                    </LinearLayout>
+
+
 
                 </android.support.v7.widget.CardView>
 

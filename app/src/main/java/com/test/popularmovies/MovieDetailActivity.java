@@ -23,7 +23,7 @@ public class MovieDetailActivity extends Activity {
 
         Log.d(this.getClass().getSimpleName(), String.valueOf(getIntent().hasExtra(Movie.KEY)));
 
-        MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment(); //(MovieDetailsFragment) getFragmentManager().findFragmentById(R.id.movie_details_fragment);
+        MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment(); //(MovieDetailsFragment) getFragmentManager().findFragmentById(R._id.movie_details_fragment);
         movieDetailsFragment.setArguments(getIntent().getExtras());
         FragmentTransaction ft = getFragmentManager().beginTransaction();
        // ft.add(movieDetailsFragment, "DETAILS").commit();

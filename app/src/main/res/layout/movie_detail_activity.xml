@@ -9,7 +9,7 @@
 
     <!--fragment
         android:name="com.test.movies.fragment.MovieDetailsFragment"
-        android:id="@+id/movie_details_fragment"
+        android:_id="@+_id/movie_details_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

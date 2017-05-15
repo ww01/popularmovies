@@ -19,7 +19,7 @@ import com.test.popularmovies.R;
 public class ReviewsScrollListener extends EndlessRecyclerViewScrollListener {
 
     protected MovieReviewsAdapter reviewsAdapter;
-    protected int movieId; //TMDB movie id NOT movie entity id
+    protected int movieId; //TMDB movie _id NOT movie entity _id
 
     public ReviewsScrollListener(LinearLayoutManager layoutManager, MovieReviewsAdapter reviewsAdapter, int movieId) {
         super(layoutManager);

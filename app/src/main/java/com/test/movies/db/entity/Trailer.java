@@ -10,7 +10,7 @@ public class Trailer implements IEntity {
 
     protected int id;
     /*
-    "id": "58f33221c3a368086700edf5",
+    "_id": "58f33221c3a368086700edf5",
       "iso_639_1": "en",
       "iso_3166_1": "US",
       "key": "JwMKRevYa_M",

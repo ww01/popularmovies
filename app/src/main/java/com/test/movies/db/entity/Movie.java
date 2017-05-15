@@ -4,11 +4,13 @@ package com.test.movies.db.entity;
 import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.test.movies.db.contract.PopularMoviesContract;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
 /**
@@ -22,8 +24,8 @@ public class Movie implements Parcelable, IEntity<Movie> {
     @Transient
     public static final String KEY = "MOVIE";
 
-
-    protected long id;
+    @Id(autoincrement = true)
+    protected Long _id;
 
     protected int TMDBId; // The Movie DataBase ID
 
@@ -38,12 +40,11 @@ public class Movie implements Parcelable, IEntity<Movie> {
     protected double rating;
 
     public Movie(){
-
     }
 
     public Movie(Parcel src){
 
-        this.id  = src.readLong();
+        this._id = (Long) src.readValue(Long.class.getClassLoader());
         this.TMDBId = src.readInt();
         this.title = src.readString();
         this.image = src.readString();
@@ -61,10 +62,10 @@ public class Movie implements Parcelable, IEntity<Movie> {
         this.TMDBId = TMDBId;
     }
 
-    @Generated(hash = 1409911408)
-    public Movie(long id, int TMDBId, String title, String image, String synopsis, boolean isFavourite,
+    @Generated(hash = 1692557147)
+    public Movie(Long _id, int TMDBId, String title, String image, String synopsis, boolean isFavourite,
             double rating) {
-        this.id = id;
+        this._id = _id;
         this.TMDBId = TMDBId;
         this.title = title;
         this.image = image;
@@ -93,7 +94,9 @@ public class Movie implements Parcelable, IEntity<Movie> {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
+
+
+        dest.writeValue(this._id);
         dest.writeInt(this.TMDBId);
         dest.writeString(this.title);
         dest.writeString(this.image);
@@ -139,12 +142,12 @@ public class Movie implements Parcelable, IEntity<Movie> {
 
 
 
-    public long getId() {
-        return id;
+    public Long get_id() {
+        return _id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void set_id(Long _id) {
+        this._id = _id;
     }
 
     public int getTMDBId() {
