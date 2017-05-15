@@ -3,6 +3,7 @@ package com.test.movies.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class MoviesListFragment extends android.support.v4.app.Fragment implemen
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.getAdapterPosition();
+           // this.getAdapterPosition();
             this.poster = (ImageView) itemView.findViewById(R.id.tile_poster);
             this.title = (TextView) itemView.findViewById(R.id.tile_title);
         }
@@ -43,26 +44,27 @@ public class MoviesListFragment extends android.support.v4.app.Fragment implemen
     protected GridLayoutManager layoutManager;
     protected RecyclerView recyclerView;
     protected int startPage = 1;
+    private static final String LAYOUT_MANAGER="LAYOUT_MANAGER";
 
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
         this.adapter = new MoviesListAdapter();
+
+
         this.layoutManager = new GridLayoutManager(this.getContext(), 2);
-        if(savedState != null && savedState.containsKey(MoviesListAdapter.KEY)){
+
+        if(savedState == null)
+            return;
+
+        if(savedState.containsKey(LAYOUT_MANAGER))
+            this.layoutManager.onRestoreInstanceState(savedState.getParcelable(LAYOUT_MANAGER));
+
+        if(savedState.containsKey(MoviesListAdapter.KEY)){
             this.adapter.addItems(savedState.<Movie>getParcelableArrayList(MoviesListAdapter.KEY));
         }
-
-        if(savedState != null && savedState.containsKey(TMDBScrollListener.KEY) && savedState.getSerializable(TMDBScrollListener.KEY) instanceof InetQueryBuilder.SortOrder){
-            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, (InetQueryBuilder.SortOrder) savedState.getSerializable(TMDBScrollListener.KEY));
-        } else {
-            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, InetQueryBuilder.SortOrder.HIGHEST_RATED);
-        }
-
-        if(savedState != null && savedState.containsKey(TMDBScrollListener.PAGE_KEY))
-            this.scrollListener.setCurrentPage(savedState.getInt(TMDBScrollListener.PAGE_KEY));
-        
     }
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,6 +72,22 @@ public class MoviesListFragment extends android.support.v4.app.Fragment implemen
         ViewGroup moviesListLayout = (ViewGroup) inflater.inflate(R.layout.movies_list, container, false);
 
         recyclerView = (RecyclerView) moviesListLayout.findViewById(R.id.posters_recycler);
+
+
+        //this.layoutManager = new GridLayoutManager(this.getContext(), 2);
+        /*if(savedInstanceState != null && savedInstanceState.containsKey(MoviesListAdapter.KEY)){
+            this.adapter.addItems(savedInstanceState.<Movie>getParcelableArrayList(MoviesListAdapter.KEY));
+        }*/
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(TMDBScrollListener.KEY) && savedInstanceState.getSerializable(TMDBScrollListener.KEY) instanceof InetQueryBuilder.SortOrder){
+            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, (InetQueryBuilder.SortOrder) savedInstanceState.getSerializable(TMDBScrollListener.KEY));
+        } else {
+            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, InetQueryBuilder.SortOrder.HIGHEST_RATED);
+        }
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(TMDBScrollListener.PAGE_KEY))
+            this.scrollListener.setCurrentPage(savedInstanceState.getInt(TMDBScrollListener.PAGE_KEY));
+
         recyclerView.setAdapter(this.adapter);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -94,11 +112,17 @@ public class MoviesListFragment extends android.support.v4.app.Fragment implemen
     @Override
     public void onSaveInstanceState(Bundle bundle){
         super.onSaveInstanceState(bundle);
-        bundle.putParcelableArrayList(MoviesListAdapter.KEY, this.adapter.getMovies());
+
+        if(this.adapter != null && this.adapter.getItemCount() > 0)
+            bundle.putParcelableArrayList(MoviesListAdapter.KEY, this.adapter.getMovies());
+
         if(this.scrollListener != null) {
             bundle.putSerializable(TMDBScrollListener.KEY, this.scrollListener.getSortOrder());
             bundle.putInt(TMDBScrollListener.PAGE_KEY, this.scrollListener.getCurrentPage());
         }
+
+        if(this.layoutManager != null)
+            bundle.putParcelable(LAYOUT_MANAGER, this.layoutManager.onSaveInstanceState());
 
     }
 

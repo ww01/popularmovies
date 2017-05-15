@@ -52,9 +52,7 @@ public class Communicator {
                     String key = keys.next().toLowerCase();
                     switch (key) {
                         case "title":
-                            Log.d("movie_title", object.getString(key));
                             movie.setTitle(object.getString(key));
-                            Log.d("movie_title_saved", movie.getTitle());
                             break;
                         case "vote_average":
                             movie.setRating(object.getDouble(key));
@@ -79,7 +77,6 @@ public class Communicator {
 
         public ArrayList<Review> parseReviews(String string) throws JSONException {
             JSONObject object = new JSONObject(string);
-            Log.d("reviews_json", string);
             if(!object.has("results"))
                 throw new JSONException("Malforrmed response received - no results present.");
             return this.reviewsFromJson(object.getJSONArray("results"));
@@ -214,7 +211,6 @@ public class Communicator {
             return new JsonDecoder().parseReviews(response.body().string());
         }
 
-        Log.d("trailer_url", new Request.Builder().url(this.inetQueryBuilder.getMovieReviews(movieId, page)).build().toString());
         throw new IOException(response.code() + "");
     }
 

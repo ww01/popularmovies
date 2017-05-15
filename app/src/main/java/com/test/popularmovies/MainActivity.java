@@ -7,29 +7,39 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.test.movies.fragment.IFragmentVisible;
 import com.test.movies.fragment.MovieFavouritesFragment;
 import com.test.movies.fragment.MoviesListFragment;
 import com.test.movies.helpers.ConnectivityHelper;
+import com.test.movies.inet.InetQueryBuilder;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
         public static final int ITEMS_NUM = 2;
-
+        //private ArrayList<android.support.v4.app.Fragment> fragments;
         public FragmentPagerAdapter(FragmentManager fm) {
             super(fm);
-
+           // this.fragments = new ArrayList<android.support.v4.app.Fragment>();
+           // this.fragments.add(new MoviesListFragment());
+            //this.fragments.add(new MovieFavouritesFragment());
 
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-            if(position >= ITEMS_NUM)
+
+            /*if(position >= this.fragments.size())
                 return null;
 
+            return this.fragments.get(position);*/
 
             Fragment fragment = null;
 
@@ -42,11 +52,14 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
+            Log.d("fragment_position", String.valueOf(position));
+
             return fragment;
         }
 
         @Override
         public int getCount() {
+            //return this.fragments.size();
             return ITEMS_NUM;
         }
     }
