@@ -107,16 +107,10 @@ public class MovieFavouritesFragment extends android.support.v4.app.Fragment imp
         this.adapter.removeItems(remove);
     }
 
-    @Override
-    public void setUserVisibleHint(boolean visibleHint){
-        super.setUserVisibleHint(visibleHint);
-        Log.d("user_visible_hint", "called");
-    }
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
         if(cursor == null || cursor.isClosed()) {
-            Log.d("movies_cursor", "isClosed");
             return;
         }
 

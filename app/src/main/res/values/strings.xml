@@ -13,4 +13,8 @@
     <string name="movie_unfaved">Movie has been removed from your favourites.</string>
     <string name="view_pager_tab_popular">Popular</string>
     <string name="view_pager_tab_favourite">Favourite</string>
+    <string-array name="sort_order">
+        <item>Top rated</item>
+        <item>Popular</item>
+    </string-array>
 </resources>

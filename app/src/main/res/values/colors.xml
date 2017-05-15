@@ -7,4 +7,5 @@
     <color name="appBackground">#BEBEBE</color>
     <color name="colorTileBackground">@color/appBackground</color>
 
+
 </resources>

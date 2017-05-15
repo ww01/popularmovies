@@ -3,6 +3,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Spinner
+        android:id="@+id/sort_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        >
+
+    </Spinner>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/posters_recycler"

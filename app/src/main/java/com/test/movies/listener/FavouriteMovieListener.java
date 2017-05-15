@@ -3,6 +3,7 @@ package com.test.movies.listener;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.test.movies.db.entity.DaoSession;
@@ -42,12 +43,12 @@ public class FavouriteMovieListener implements View.OnClickListener {
         if(exists){
             this.daoSession.get().getMovieDao().delete(this.movie);
             toastText = context.getResources().getString(R.string.movie_unfaved);
+            ((TextView) v).setText("+");
         }
         else {
-            Log.d("inserted_movie_id", String.valueOf(this.movie.get_id()));
-
             this.daoSession.get().getMovieDao().insert(this.movie);
             toastText = context.getResources().getString(R.string.movie_faved);
+            ((TextView) v).setText("-");
         }
 
         Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();

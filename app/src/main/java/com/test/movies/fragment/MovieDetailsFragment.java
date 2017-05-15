@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import com.test.movies.adapter.MovieReviewsAdapter;
 import com.test.movies.adapter.MovieTrailersAdapter;
 import com.test.movies.db.entity.Movie;
+import com.test.movies.db.entity.MovieDao;
 import com.test.movies.inet.InetQueryBuilder;
 import com.test.movies.listener.FavouriteMovieListener;
 import com.test.movies.listener.ReviewsScrollListener;
@@ -71,7 +72,6 @@ public class MovieDetailsFragment extends Fragment {
 
        if(savedArg != null && savedArg.containsKey(Movie.KEY) && savedArg.getParcelable(Movie.KEY) instanceof Movie){
            Movie movie = (Movie) savedArg.getParcelable(Movie.KEY);
-           Log.d("movie_avg", String.valueOf(movie.getRating()));
            ((TextView)layout.findViewById(R.id.detail_title)).setText(movie.getTitle());
 
            Picasso.with(this.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into((ImageView)layout.findViewById(R.id.detail_poster));
@@ -97,7 +97,12 @@ public class MovieDetailsFragment extends Fragment {
            MovieTrailersAsyncTask trailersAsyncTask = new MovieTrailersAsyncTask();
            trailersAsyncTask.execute(new MovieTrailersAsyncTask.MovieTrailerTaskConfig(this.getString(R.string.themoviedb_api_key), movie.getTMDBId(), trailersAdapter));
 
-           ((ViewGroup)layout.findViewById(R.id.detail_favourite)).setOnClickListener(new FavouriteMovieListener(
+           TextView favouriteView = ((TextView) layout.findViewById(R.id.detail_favourite));
+
+           if(((DefaultApp)this.getContext().getApplicationContext()).getDaoSession().getMovieDao().queryBuilder().where(MovieDao.Properties.TMDBId.eq(movie.getTMDBId())).count() > 0)
+               favouriteView.setText("-");
+
+           (favouriteView).setOnClickListener(new FavouriteMovieListener(
                    ((DefaultApp)this.getContext().getApplicationContext()).getDaoSession(), movie
            ));
 

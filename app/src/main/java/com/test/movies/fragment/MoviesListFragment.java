@@ -1,33 +1,28 @@
 package com.test.movies.fragment;
 
-import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.movies.adapter.MoviesListAdapter;
 import com.test.movies.db.entity.Movie;
-import com.test.movies.helpers.ConnectivityHelper;
 import com.test.movies.inet.InetQueryBuilder;
 import com.test.movies.listener.TMDBScrollListener;
-import com.test.movies.task.MoviesAsyncTask;
 import com.test.popularmovies.R;
 
 /**
  * Created by waldek on 07.04.17.
  */
 
-public class MoviesListFragment extends android.support.v4.app.Fragment {
+public class MoviesListFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -45,6 +40,7 @@ public class MoviesListFragment extends android.support.v4.app.Fragment {
     private MoviesListAdapter adapter;
 
     protected TMDBScrollListener scrollListener;
+    protected GridLayoutManager layoutManager;
     protected RecyclerView recyclerView;
     protected int startPage = 1;
 
@@ -52,9 +48,20 @@ public class MoviesListFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
         this.adapter = new MoviesListAdapter();
+        this.layoutManager = new GridLayoutManager(this.getContext(), 2);
         if(savedState != null && savedState.containsKey(MoviesListAdapter.KEY)){
             this.adapter.addItems(savedState.<Movie>getParcelableArrayList(MoviesListAdapter.KEY));
         }
+
+        if(savedState != null && savedState.containsKey(TMDBScrollListener.KEY) && savedState.getSerializable(TMDBScrollListener.KEY) instanceof InetQueryBuilder.SortOrder){
+            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, (InetQueryBuilder.SortOrder) savedState.getSerializable(TMDBScrollListener.KEY));
+        } else {
+            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, InetQueryBuilder.SortOrder.HIGHEST_RATED);
+        }
+
+        if(savedState != null && savedState.containsKey(TMDBScrollListener.PAGE_KEY))
+            this.scrollListener.setCurrentPage(savedState.getInt(TMDBScrollListener.PAGE_KEY));
+        
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,18 +71,13 @@ public class MoviesListFragment extends android.support.v4.app.Fragment {
 
         recyclerView = (RecyclerView) moviesListLayout.findViewById(R.id.posters_recycler);
         recyclerView.setAdapter(this.adapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
 
+        Spinner spinner = (Spinner) moviesListLayout.findViewById(R.id.sort_order);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this.getContext(), R.array.sort_order, android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(this);
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(TMDBScrollListener.KEY) && savedInstanceState.getSerializable(TMDBScrollListener.KEY) instanceof InetQueryBuilder.SortOrder){
-            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, (InetQueryBuilder.SortOrder) savedInstanceState.getSerializable(TMDBScrollListener.KEY));
-        } else {
-            this.scrollListener = new TMDBScrollListener(layoutManager, this.adapter, InetQueryBuilder.SortOrder.HIGHEST_RATED);
-        }
-
-        if(savedInstanceState != null && savedInstanceState.containsKey(TMDBScrollListener.PAGE_KEY))
-            this.scrollListener.setCurrentPage(savedInstanceState.getInt(TMDBScrollListener.PAGE_KEY));
 
         recyclerView.addOnScrollListener(this.scrollListener);
 
@@ -87,10 +89,7 @@ public class MoviesListFragment extends android.support.v4.app.Fragment {
         return moviesListLayout;
     }
 
-    @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
-        super.onInflate(context, attrs, savedInstanceState);
-    }
+
 
     @Override
     public void onSaveInstanceState(Bundle bundle){
@@ -103,24 +102,35 @@ public class MoviesListFragment extends android.support.v4.app.Fragment {
 
     }
 
+
+
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-    }
+        InetQueryBuilder.SortOrder sortOrder = null;
 
+        switch(position){
+            case 0:
+                sortOrder = InetQueryBuilder.SortOrder.HIGHEST_RATED;
+                break;
+            case 1:
+                sortOrder = InetQueryBuilder.SortOrder.POPULAR;
+                break;
+            default:
+                throw new IndexOutOfBoundsException();
+        }
 
-    public void changeSortOrder(InetQueryBuilder.SortOrder sortOrder){
-        if(ConnectivityHelper.isNetworkAvailableMsg(this.getContext()) && this.adapter != null && this.scrollListener != null){
-            this.adapter.clearItems();
-            this.scrollListener.setSortOrder(sortOrder);
-            this.scrollListener.resetState();
-            if(this.adapter.getItemCount() == 0){
-                this.scrollListener.loadInitialItems(this.getContext(), this.startPage);
+        this.adapter.clearItems();
+        this.scrollListener.setSortOrder(sortOrder);
+        this.scrollListener.resetState();
+        if(this.adapter.getItemCount() == 0){
+            this.scrollListener.loadInitialItems(this.getContext(), this.startPage);
 
-            }
         }
     }
 
-
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Intentioanlly left blank
+    }
 }

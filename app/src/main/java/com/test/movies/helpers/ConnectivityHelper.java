@@ -16,6 +16,8 @@ public class ConnectivityHelper {
     private ConnectivityHelper(){}
 
     public static boolean isNetworkAvailable(Context context){
+        if(context == null)
+            return false;
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -23,6 +25,9 @@ public class ConnectivityHelper {
     }
 
     public static boolean isNetworkAvailableMsg(Context context){
+        if(context == null)
+            return false;
+
         boolean result = ConnectivityHelper.isNetworkAvailable(context);
         if(!result)
             Toast.makeText(context, context.getText(R.string.no_network), Toast.LENGTH_LONG).show();
