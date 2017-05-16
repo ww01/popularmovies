@@ -106,9 +106,6 @@ public class MainActivity extends AppCompatActivity {
                 if(position < actionBar.getTabCount())
                     actionBar.selectTab(actionBar.getTabAt(position));
 
-                if( pagerAdapter.getItem(viewPager.getCurrentItem()) instanceof IFragmentVisible) {
-                    ((IFragmentVisible)pagerAdapter.getItem(viewPager.getCurrentItem())).reInitLoader();
-                }
 
 
             }

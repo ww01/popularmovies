@@ -17,14 +17,10 @@ import org.greenrobot.greendao.annotation.Transient;
  * Created by waldek on 05.04.17.
  */
 
-@Entity
 public class Movie implements Parcelable, IEntity<Movie> {
 
-
-    @Transient
     public static final String KEY = "MOVIE";
 
-    @Id(autoincrement = true)
     protected Long _id;
 
     protected int TMDBId; // The Movie DataBase ID
@@ -115,7 +111,7 @@ public class Movie implements Parcelable, IEntity<Movie> {
 
             contentValues.put(PopularMoviesContract.Movie.TMDB_ID, entity.getTMDBId());
             contentValues.put(PopularMoviesContract.Movie.IMAGE, entity.getImage());
-            contentValues.put(PopularMoviesContract.Movie.IS_FAVOURITE, entity.getIsFavourite());
+            contentValues.put(PopularMoviesContract.Movie.IS_FAVOURITE, entity.getIsFavourite()? 1 : 0);
             contentValues.put(PopularMoviesContract.Movie.RATING, entity.getRating());
             contentValues.put(PopularMoviesContract.Movie.SYNOPSIS, entity.getSynopsis());
             contentValues.put(PopularMoviesContract.Movie.TITLE, entity.getTitle());

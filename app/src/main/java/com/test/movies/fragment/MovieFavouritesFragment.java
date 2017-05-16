@@ -72,7 +72,9 @@ public class MovieFavouritesFragment extends android.support.v4.app.Fragment imp
 
     private void updateAdapterState(){
 
-        if(this.getContext() == null)
+        this.getLoaderManager().restartLoader(LOADER_ID, null, this);
+        return;
+      /*  if(this.getContext() == null)
             return;
 
         ArrayList<Movie> movies = (ArrayList<Movie>)((DefaultApp)this.getContext().getApplicationContext()).getDaoSession().getMovieDao().loadAll();
@@ -104,7 +106,7 @@ public class MovieFavouritesFragment extends android.support.v4.app.Fragment imp
                 this.adapter.getMovies().add(refreshed);
         }
 
-        this.adapter.removeItems(remove);
+        this.adapter.removeItems(remove);*/
     }
 
 

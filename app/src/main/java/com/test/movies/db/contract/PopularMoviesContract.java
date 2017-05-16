@@ -30,12 +30,12 @@ public class PopularMoviesContract  {
 
     public static class Movie {
         public static final String ID = "_id";
-        public static final String TMDB_ID = "tmdbId";
-        public static final String TITLE = "title";
-        public static final String IMAGE = "image";
-        public static final String SYNOPSIS = "synopsis";
-        public static final String IS_FAVOURITE = "isFavorite";
-        public static final String RATING = "rating";
+        public static final String TMDB_ID = "TMDBID";
+        public static final String TITLE = "TITLE";
+        public static final String IMAGE = "IMAGE";
+        public static final String SYNOPSIS = "SYNOPSIS";
+        public static final String IS_FAVOURITE = "IS_FAVOURITE";
+        public static final String RATING = "RATING";
     }
 
 }

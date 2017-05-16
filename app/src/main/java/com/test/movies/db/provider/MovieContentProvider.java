@@ -4,17 +4,14 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.test.movies.db.MoviesDBHelper;
 import com.test.movies.db.contract.ContractUriBuilder;
 import com.test.movies.db.contract.PopularMoviesContract;
-import com.test.movies.db.entity.DaoSession;
-import com.test.movies.db.entity.Movie;
-import com.test.popularmovies.DefaultApp;
 
 /**
  * Created by waldek on 06.05.17.
@@ -22,7 +19,9 @@ import com.test.popularmovies.DefaultApp;
 
 public class MovieContentProvider extends ContentProvider {
 
-    private DaoSession daoSession;
+   // private DaoSession daoSession;
+
+    private MoviesDBHelper dbHelper;
 
     private static final UriMatcher URI_MATCHER;
     private static final int MARKED_MOVIES = 1;
@@ -34,7 +33,7 @@ public class MovieContentProvider extends ContentProvider {
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URI_MATCHER.addURI(PopularMoviesContract.AUTHORITY, "/movie/all", MARKED_MOVIES);
-        URI_MATCHER.addURI(PopularMoviesContract.AUTHORITY, "/movie/show/#", MARKED_MOVIE);
+        URI_MATCHER.addURI(PopularMoviesContract.AUTHORITY, "/movie/show", MARKED_MOVIE);
         URI_MATCHER.addURI(PopularMoviesContract.AUTHORITY, "/movie/add", MARKED_MOVIE_ADD);
         URI_MATCHER.addURI(PopularMoviesContract.AUTHORITY, "/movie/delete", MARKED_MOVIE_DELETE);
         URI_MATCHER.addURI(PopularMoviesContract.AUTHORITY, "/movie/update", MARKED_MOVIE_UPDATE);
@@ -42,21 +41,38 @@ public class MovieContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        this.daoSession = ((DefaultApp)this.getContext().getApplicationContext()).getDaoSession();
-        return daoSession != null;
+        //this.daoSession = ((DefaultApp)this.getContext().getApplicationContext()).getDaoSession();
+        this.dbHelper = new MoviesDBHelper(this.getContext());
+        return true;
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 
-        if(this.daoSession == null || !(this.daoSession.getDatabase().getRawDatabase() instanceof SQLiteDatabase))
+        if(this.dbHelper == null)
             return null;
+
+        Log.d("entry_uri", uri.toString());
 
         switch (URI_MATCHER.match(uri)){
             case MARKED_MOVIES:
-                return ((SQLiteDatabase)this.daoSession.getDatabase().getRawDatabase()).query(PopularMoviesContract.ContractName.MOVIE.getName(),
+                //fetch all movies, no filtering
+                return this.dbHelper.getReadableDatabase().query(PopularMoviesContract.ContractName.MOVIE.getName(),
                         null, null, null, null, null, null);
+            case MARKED_MOVIE:
+                // get movie only by its The Movie Database id
+                try {
+                    return this.dbHelper.getReadableDatabase().query(PopularMoviesContract.ContractName.MOVIE.getName(), null,
+                            PopularMoviesContract.Movie.TMDB_ID + "=?",
+                            selectionArgs, // we should test if passed values are valid integeres and only then convert them to strings
+                            null, null, null);
+                } catch (NumberFormatException e){
+                    Log.d(this.getClass().getSimpleName(), "Invalid movie id type.");
+                    return null;
+                }
+
+
         }
 
         return null;
@@ -87,13 +103,13 @@ public class MovieContentProvider extends ContentProvider {
 
         Uri resUri = null;
         ContractUriBuilder uriBuilder = new ContractUriBuilder(PopularMoviesContract.AUTHORITY);
-
         switch (URI_MATCHER.match(uri)){
             case MARKED_MOVIE_ADD:
-                Movie movie = Movie.CONTENT_VALUES_CREATOR.fromContentValues(values);
-                this.daoSession.insert(movie);
+                Log.d("movie_content", values.toString());
+                long newId = this.dbHelper.getWritableDatabase().insertOrThrow(PopularMoviesContract.ContractName.MOVIE.getName(), null, values);
+                Log.d("movie_insert_id", newId + "" );
                 this.getContext().getContentResolver().notifyChange(uri, null);
-                return uriBuilder.uriInsert(PopularMoviesContract.ContractName.MOVIE, movie.get_id());
+                return uriBuilder.uriInserted(PopularMoviesContract.ContractName.MOVIE, newId);
         }
 
         return resUri;
@@ -103,12 +119,15 @@ public class MovieContentProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         int affected = 0;
 
-        if(!(this.daoSession.getDatabase().getRawDatabase() instanceof SQLiteDatabase))
+        if(this.dbHelper == null)
             return 0;
 
         switch(URI_MATCHER.match(uri)){
             case MARKED_MOVIE_DELETE:
-                affected = ((SQLiteDatabase)this.daoSession.getDatabase().getRawDatabase()).delete("", selection, selectionArgs);
+                Log.d("movie_delete_uri", uri.toString());
+                affected = this.dbHelper.getWritableDatabase().delete(PopularMoviesContract.ContractName.MOVIE.getName(),
+                        PopularMoviesContract.Movie.TMDB_ID + "=?",
+                        selectionArgs);
                 if(affected > 0)
                     this.getContext().getContentResolver().notifyChange(uri, null);
                 break;
