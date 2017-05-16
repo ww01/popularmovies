@@ -53,7 +53,6 @@ public class MovieContentProvider extends ContentProvider {
         if(this.dbHelper == null)
             return null;
 
-        Log.d("entry_uri", uri.toString());
 
         switch (URI_MATCHER.match(uri)){
             case MARKED_MOVIES:
@@ -105,9 +104,7 @@ public class MovieContentProvider extends ContentProvider {
         ContractUriBuilder uriBuilder = new ContractUriBuilder(PopularMoviesContract.AUTHORITY);
         switch (URI_MATCHER.match(uri)){
             case MARKED_MOVIE_ADD:
-                Log.d("movie_content", values.toString());
                 long newId = this.dbHelper.getWritableDatabase().insertOrThrow(PopularMoviesContract.ContractName.MOVIE.getName(), null, values);
-                Log.d("movie_insert_id", newId + "" );
                 this.getContext().getContentResolver().notifyChange(uri, null);
                 return uriBuilder.uriInserted(PopularMoviesContract.ContractName.MOVIE, newId);
         }
@@ -124,7 +121,6 @@ public class MovieContentProvider extends ContentProvider {
 
         switch(URI_MATCHER.match(uri)){
             case MARKED_MOVIE_DELETE:
-                Log.d("movie_delete_uri", uri.toString());
                 affected = this.dbHelper.getWritableDatabase().delete(PopularMoviesContract.ContractName.MOVIE.getName(),
                         PopularMoviesContract.Movie.TMDB_ID + "=?",
                         selectionArgs);

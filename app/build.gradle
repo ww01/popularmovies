@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 23
@@ -24,9 +23,6 @@ android {
     }
 }
 
-greendao {
-    schemaVersion 1
-}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -40,7 +36,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
-    compile 'org.greenrobot:greendao:3.2.2'
     testCompile 'junit:junit:4.12'
 }
 

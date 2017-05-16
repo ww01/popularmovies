@@ -1,8 +1,6 @@
 package com.test.movies.fragment;
 
 
-import android.app.Fragment;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -15,9 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.test.movies.adapter.MovieReviewsAdapter;
@@ -25,13 +21,10 @@ import com.test.movies.adapter.MovieTrailersAdapter;
 import com.test.movies.db.contract.ContractUriBuilder;
 import com.test.movies.db.contract.PopularMoviesContract;
 import com.test.movies.db.entity.Movie;
-import com.test.movies.db.entity.MovieDao;
 import com.test.movies.inet.InetQueryBuilder;
 import com.test.movies.listener.FavouriteMovieListener;
 import com.test.movies.listener.ReviewsScrollListener;
-import com.test.movies.task.MovieReviewsAsyncTask;
 import com.test.movies.task.MovieTrailersAsyncTask;
-import com.test.popularmovies.DefaultApp;
 import com.test.popularmovies.R;
 
 

@@ -8,10 +8,6 @@ import android.util.Log;
 
 import com.test.movies.db.contract.PopularMoviesContract;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * Created by waldek on 05.04.17.
@@ -58,7 +54,6 @@ public class Movie implements Parcelable, IEntity<Movie> {
         this.TMDBId = TMDBId;
     }
 
-    @Generated(hash = 1692557147)
     public Movie(Long _id, int TMDBId, String title, String image, String synopsis, boolean isFavourite,
             double rating) {
         this._id = _id;
