@@ -86,8 +86,6 @@ public class MoviesListFragment extends android.support.v4.app.Fragment {
 
         this.dataSource = this.createDataSource((DataSourceType) savedState.get(DATA_SOURCE));
 
-        if(dataSource instanceof Communicator)
-            this.moviesScrollListener.setCurrentPage(1); // has to be > 0
 
         if(savedState.containsKey(LAYOUT_MANAGER))
             this.layoutManager.onRestoreInstanceState(savedState.getParcelable(LAYOUT_MANAGER));
@@ -145,6 +143,10 @@ public class MoviesListFragment extends android.support.v4.app.Fragment {
 
         if(this.layoutManager != null)
             bundle.putParcelable(LAYOUT_MANAGER, this.layoutManager.onSaveInstanceState());
+
+        if(this.dataSource != null){
+            bundle.putSerializable(DATA_SOURCE, this.dataSource instanceof Communicator ? DataSourceType.NETWORK : DataSourceType.DATABASE );
+        }
 
     }
 

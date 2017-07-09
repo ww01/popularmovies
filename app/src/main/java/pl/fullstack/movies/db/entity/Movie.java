@@ -9,6 +9,7 @@ import pl.fullstack.movies.db.contract.PopularMoviesContract;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
 
@@ -22,6 +23,7 @@ public class Movie implements Parcelable, IEntity<Movie> {
     @Transient
     public static final String KEY = "MOVIE";
 
+    @Id
     protected Long _id;
 
     protected int TMDBId; // The Movie DataBase ID

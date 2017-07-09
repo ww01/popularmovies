@@ -5,6 +5,8 @@ import pl.fullstack.movies.db.entity.DaoSession;
 import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.db.entity.MovieDao;
 
+import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.query.Query;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
@@ -33,9 +35,22 @@ public class MovieRepo implements AbstractMovieDataSource {
         if(perPage <= 0)
             throw new IllegalArgumentException("Number of items per page should be greater than 0");
 
-        QueryBuilder<Movie> movieQueryBuilder = this.daoSession.getMovieDao().queryBuilder().where(MovieDao.Properties.IsFavourite.eq(true)).offset(page*perPage).limit(perPage);
+        QueryBuilder<Movie> movieQueryBuilder = this.daoSession.getMovieDao().queryBuilder().offset(page*perPage).limit(perPage);
         return Observable.fromArray(movieQueryBuilder.build().list());
     }
 
+    public Movie getByTmdbId(int tmdbId){
+
+        Movie movie = null;
+        QueryBuilder<Movie> movieQuery = this.daoSession.getMovieDao().queryBuilder().where(MovieDao.Properties.TMDBId.eq("?"));
+
+        try {
+            movie = movieQuery.build().setParameter(0, tmdbId).unique();
+        } catch(DaoException e){
+            e.printStackTrace();
+        }
+
+        return movie;
+    }
 
 }

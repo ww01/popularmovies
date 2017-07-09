@@ -8,8 +8,8 @@ import org.greenrobot.greendao.annotation.Generated;
  * Created by waldek on 07.05.17.
  */
 
-@Entity
 public class Trailer implements IEntity {
+
 
     protected int id;
     /*

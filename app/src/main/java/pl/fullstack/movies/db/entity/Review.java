@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * Created by waldek on 03.05.17.
@@ -13,6 +14,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class Review implements Parcelable, IEntity {
 
+    @Id
     protected int id;
 
     protected String TMDBId;
