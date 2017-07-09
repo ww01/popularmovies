@@ -1,19 +1,14 @@
 package pl.fullstack.movies.listener;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import pl.fullstack.movies.db.contract.ContractUriBuilder;
-import pl.fullstack.movies.db.contract.PopularMoviesContract;
 import pl.fullstack.movies.db.dao.MovieRepo;
 import pl.fullstack.movies.db.entity.DaoSession;
 import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.activity.R;
-import pl.fullstack.movies.db.entity.MovieDao;
 import pl.fullstack.movies.db.session.DbSession;
 
 /**
@@ -41,15 +36,19 @@ public class FavouriteMovieListener implements View.OnClickListener {
         if (found != null) {
             dbSession.getMovieDao().delete(found);
             toastText = context.getResources().getString(R.string.movie_unfaved);
-            ((TextView) v).setText("+");
+            ((FloatingActionButton) v).setImageResource(R.drawable.ic_check_white_24dp);
+            this.movie.setFavourite(false);
         } else {
-
             dbSession.getMovieDao().insert(this.movie);
-
             toastText = context.getResources().getString(R.string.movie_faved);
-            ((TextView) v).setText("-");
+            ((FloatingActionButton)v).setImageResource(R.drawable.ic_clear_white_24dp);
+            this.movie.setFavourite(true);
         }
 
         Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+    }
+
+    public boolean getIsFavourite(){
+        return this.movie.isFavourite();
     }
 }

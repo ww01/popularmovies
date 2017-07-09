@@ -3,6 +3,7 @@ package pl.fullstack.movies.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.NestedScrollView;
@@ -34,7 +35,7 @@ import pl.fullstack.movies.task.MovieTrailersAsyncTask;
  * Created by waldek on 15.04.17.
  */
 
-public class MovieDetailsFragment extends android.support.v4.app.Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MovieDetailsFragment extends android.support.v4.app.Fragment {
 
     public static class MovieReviewViewHolder extends RecyclerView.ViewHolder {
 
@@ -63,7 +64,7 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
 
     protected boolean isFavedMovie = false;
     protected Movie movie;
-    protected TextView favouriteView;
+    protected FloatingActionButton favouriteView;
     private static int LOADER_ID = 222;
 
     @Override
@@ -73,13 +74,10 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
        NestedScrollView layout = (NestedScrollView) inflater.inflate(R.layout.movie_detail, container, false);
 
        Bundle savedArg = this.getArguments();
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(LOADER_ID, savedArg, this);
+
 
        if(savedArg != null && savedArg.containsKey(Movie.KEY) && savedArg.getParcelable(Movie.KEY) instanceof Movie){
            this.movie = (Movie) savedArg.getParcelable(Movie.KEY);
-
-           //android.support.v4.app.LoaderManager loaderManager = getLoaderManager();
 
 
            ((TextView)layout.findViewById(R.id.detail_title)).setText(movie.getTitle());
@@ -107,10 +105,10 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
            MovieTrailersAsyncTask trailersAsyncTask = new MovieTrailersAsyncTask();
            trailersAsyncTask.execute(new MovieTrailersAsyncTask.MovieTrailerTaskConfig(this.getString(R.string.themoviedb_api_key), movie.getTMDBId(), trailersAdapter));
 
-           this.favouriteView = ((TextView) layout.findViewById(R.id.detail_favourite));
+           this.favouriteView = ((FloatingActionButton) layout.findViewById(R.id.detail_favourite));
 
            if(this.isFavedMovie) {
-               this.favouriteView.setText("-");
+               this.favouriteView.setImageResource(R.drawable.ic_clear_white_24dp);
            }
 
            (favouriteView).setOnClickListener(new FavouriteMovieListener(movie));
@@ -120,57 +118,5 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment implem
        return layout;
    }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Movie bundleMovie = null;
-        if( args != null && args.containsKey(Movie.KEY)){
-            bundleMovie = (Movie) args.getParcelable(Movie.KEY);
-        }
-        ContractUriBuilder contractUriBuilder = new ContractUriBuilder(PopularMoviesContract.AUTHORITY);
-        String movieId = bundleMovie != null? String.valueOf(bundleMovie.getTMDBId()) : "-1";
 
-        return new android.support.v4.content.CursorLoader(this.getContext(),
-                contractUriBuilder.uriFetch(PopularMoviesContract.ContractName.MOVIE),
-                null, null, new String[]{movieId}, null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if(cursor == null || cursor.isClosed()) {
-            return;
-        }
-
-
-        if(cursor.getCount() != 1){
-            Log.d(this.getClass().getSimpleName(), "Non unique result returned from query.");
-            return;
-        }
-
-        try {
-            cursor.moveToFirst();
-
-                Movie fromDB = new Movie(
-                        cursor.getLong(0),
-                        cursor.getInt(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4),
-                        cursor.getInt(5) > 0,
-                        cursor.getDouble(6)
-                );
-
-                this.isFavedMovie = this.movie != null && fromDB != null && this.movie.getTitle().equals(fromDB.getTitle());
-                if(this.isFavedMovie)
-                    this.favouriteView.setText("-");
-
-        } finally {
-            if(cursor != null && !cursor.isClosed())
-                cursor.close();
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        this.isFavedMovie = false;
-    }
 }
