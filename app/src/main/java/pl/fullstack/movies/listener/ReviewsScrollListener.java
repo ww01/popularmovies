@@ -7,11 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.Toast;
 
+import pl.fullstack.activity.R;
 import pl.fullstack.movies.adapter.MovieReviewsAdapter;
 import pl.fullstack.movies.helpers.ConnectivityHelper;
 import pl.fullstack.movies.task.MovieReviewsAsyncTask;
-import com.fullstack.popularmovies.R;
 
+//import pl.fullstack.activity.R;
 /**
  * Created by waldek on 05.05.17.
  */

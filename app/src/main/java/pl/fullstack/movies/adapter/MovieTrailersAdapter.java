@@ -14,8 +14,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import pl.fullstack.movies.db.entity.Trailer;
 import pl.fullstack.movies.fragment.MovieDetailsFragment;
-import pl.fullstack.movies.inet.InetQueryBuilder;
-import com.fullstack.popularmovies.R;
+import pl.fullstack.movies.net.InetQueryBuilder;
+import pl.fullstack.activity.R;
 
 import java.util.ArrayList;
 

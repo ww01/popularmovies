@@ -16,16 +16,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import pl.fullstack.activity.R;
 import pl.fullstack.movies.adapter.MovieReviewsAdapter;
 import pl.fullstack.movies.adapter.MovieTrailersAdapter;
 import pl.fullstack.movies.db.contract.ContractUriBuilder;
 import pl.fullstack.movies.db.contract.PopularMoviesContract;
 import pl.fullstack.movies.db.entity.Movie;
-import pl.fullstack.movies.inet.InetQueryBuilder;
+import pl.fullstack.movies.net.InetQueryBuilder;
 import pl.fullstack.movies.listener.FavouriteMovieListener;
 import pl.fullstack.movies.listener.ReviewsScrollListener;
 import pl.fullstack.movies.task.MovieTrailersAsyncTask;
-import com.fullstack.popularmovies.R;
+
 
 
 /**

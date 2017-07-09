@@ -1,6 +1,5 @@
 package pl.fullstack.activity;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -9,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import pl.fullstack.movies.fragment.MovieFavouritesFragment;
+import pl.fullstack.movies.common.DataSourceType;
 import pl.fullstack.movies.fragment.MoviesListFragment;
 import pl.fullstack.movies.helpers.ConnectivityHelper;
 
@@ -18,41 +17,31 @@ public class MainActivity extends AppCompatActivity {
     private class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
         public static final int ITEMS_NUM = 2;
-        //private ArrayList<android.support.v4.app.Fragment> fragments;
         public FragmentPagerAdapter(FragmentManager fm) {
             super(fm);
-           // this.fragments = new ArrayList<android.support.v4.app.Fragment>();
-           // this.fragments.add(new MoviesListFragment());
-            //this.fragments.add(new MovieFavouritesFragment());
 
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
 
-            /*if(position >= this.fragments.size())
-                return null;
 
-            return this.fragments.get(position);*/
-
-            Fragment fragment = null;
-
+            MoviesListFragment fragment = new MoviesListFragment();
+            Bundle args = new Bundle();
             switch (position){
                 case 0:
-                    fragment =  new MoviesListFragment();
+                    args.putSerializable(MoviesListFragment.DATA_SOURCE, DataSourceType.NETWORK);
                     break;
                 case 1:
-                    fragment =  new MovieFavouritesFragment();
+                    args.putSerializable(MoviesListFragment.DATA_SOURCE, DataSourceType.DATABASE);
                     break;
             }
-
-
+            fragment.setArguments(args);
             return fragment;
         }
 
         @Override
         public int getCount() {
-            //return this.fragments.size();
             return ITEMS_NUM;
         }
     }
@@ -98,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageSelected(position);
                 if(position < actionBar.getTabCount())
                     actionBar.selectTab(actionBar.getTabAt(position));
-
-
 
             }
         });

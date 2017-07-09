@@ -6,8 +6,8 @@ import android.widget.TextView;
 
 import pl.fullstack.movies.adapter.MovieReviewsAdapter;
 import pl.fullstack.movies.db.entity.Review;
-import pl.fullstack.movies.inet.Communicator;
-import com.fullstack.popularmovies.R;
+import pl.fullstack.movies.net.Communicator;
+import pl.fullstack.activity.R;
 
 import org.json.JSONException;
 

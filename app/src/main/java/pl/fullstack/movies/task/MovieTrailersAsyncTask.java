@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import pl.fullstack.movies.adapter.MovieTrailersAdapter;
 import pl.fullstack.movies.db.entity.Trailer;
-import pl.fullstack.movies.inet.Communicator;
+import pl.fullstack.movies.net.Communicator;
 
 import org.json.JSONException;
 

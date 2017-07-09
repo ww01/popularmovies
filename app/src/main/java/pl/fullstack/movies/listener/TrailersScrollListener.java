@@ -10,7 +10,7 @@ import android.widget.Toast;
 import pl.fullstack.movies.adapter.MovieTrailersAdapter;
 import pl.fullstack.movies.helpers.ConnectivityHelper;
 import pl.fullstack.movies.task.MovieTrailersAsyncTask;
-import com.fullstack.popularmovies.R;
+import pl.fullstack.activity.R;
 
 /**
  * Created by waldek on 07.05.17.

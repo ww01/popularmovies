@@ -1,5 +1,9 @@
-package pl.fullstack.movies.inet;
+package pl.fullstack.movies.net;
 
+import android.util.Log;
+
+import io.reactivex.Observable;
+import pl.fullstack.movies.common.AbstractMovieDataSource;
 import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.db.entity.Review;
 import pl.fullstack.movies.db.entity.Trailer;
@@ -11,7 +15,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Objects;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,7 +25,7 @@ import okhttp3.Response;
  * Created by waldek on 05.04.17.
  */
 
-public class Communicator {
+public class Communicator implements AbstractMovieDataSource{
 
     public class JsonDecoder {
         public ArrayList<Movie> parseMovies(String string) throws JSONException {
@@ -192,6 +196,28 @@ public class Communicator {
         }
 
         throw new IOException(response.code() + "");
+    }
+
+    public Observable<List<Movie>> getMovies(int page, int perPage, String query){
+        Log.d("requested_page", String.valueOf(page));
+        return Observable.create(emitter -> {
+            Log.d("request_sent", "true");
+            Response response = this.okHttpClient
+                    .newCall(
+                            new Request.Builder().url(this.inetQueryBuilder.getMoviesList(InetQueryBuilder.SortOrder.HIGHEST_RATED, page)).build()
+                    )
+                    .execute();
+
+            Log.d("response_err", response.code()+"");
+            Log.d("request_content", response.request().toString());
+
+            if(response.isSuccessful()){
+                //Log.d("response", response.body().string());
+                emitter.onNext(new JsonDecoder().parseMovies(response.body().string()));
+            } else {
+
+            }
+        });
     }
 
     public ArrayList<Review> getReviews(int movieId, int page) throws IOException, JSONException{

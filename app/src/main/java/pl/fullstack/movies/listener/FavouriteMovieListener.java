@@ -11,7 +11,7 @@ import android.widget.Toast;
 import pl.fullstack.movies.db.contract.ContractUriBuilder;
 import pl.fullstack.movies.db.contract.PopularMoviesContract;
 import pl.fullstack.movies.db.entity.Movie;
-import com.fullstack.popularmovies.R;
+import pl.fullstack.activity.R;
 
 /**
  * Created by waldek on 13.05.17.
@@ -36,9 +36,6 @@ public class FavouriteMovieListener implements View.OnClickListener {
         Cursor res = resolver.query(uriBuilder.uriFetch(PopularMoviesContract.ContractName.MOVIE), null, null,
                 new String[]{String.valueOf(this.movie.getTMDBId())}, null);
 
-        for(String column : res.getColumnNames()){
-            Log.d("column_name", column);
-        }
 
         boolean exists = res.getCount() > 0;
                 //this.daoSession.get().getMovieDao().queryBuilder().where(MovieRepo.Properties.TMDBId.eq(this.movie.getTMDBId())).count() > 0;

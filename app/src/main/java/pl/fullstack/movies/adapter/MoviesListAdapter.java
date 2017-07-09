@@ -11,11 +11,12 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.fragment.MoviesListFragment;
-import pl.fullstack.movies.inet.InetQueryBuilder;
+import pl.fullstack.movies.net.InetQueryBuilder;
 import pl.fullstack.activity.MovieDetailActivity;
-import com.fullstack.popularmovies.R;
+import pl.fullstack.activity.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by waldek on 18.04.17.
@@ -72,7 +73,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
         return this.movies.size();
     }
 
-    public void addItems(ArrayList<Movie> movies) {
+    public void addItems(List<Movie> movies) {
         this.movies.addAll(movies);
 
         this.notifyDataSetChanged();
@@ -93,7 +94,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
         this.notifyDataSetChanged();
     }
 
-    public void removeItems(ArrayList<Movie> movies){
+    public void removeItems(List<Movie> movies){
         this.movies.removeAll(movies);
         this.notifyDataSetChanged();
     }
