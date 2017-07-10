@@ -1,4 +1,4 @@
-package pl.fullstack.movies.net;
+package pl.fullstack.movies.net.helpers;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package pl.fullstack.movies.helpers;
+package pl.fullstack.movies.net.helpers;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

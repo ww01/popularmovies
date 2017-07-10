@@ -2,6 +2,10 @@ package pl.fullstack.movies.net;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import io.reactivex.Observable;
 import pl.fullstack.movies.common.AbstractMovieDataSource;
 import pl.fullstack.movies.db.entity.Movie;
@@ -13,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,12 +25,26 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import pl.fullstack.movies.net.deserializer.MovieListDeserializer;
+import pl.fullstack.movies.net.service.MovieApi;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by waldek on 05.04.17.
  */
 
-public class Communicator implements AbstractMovieDataSource{
+public class Communicator implements AbstractMovieDataSource {
+
+    public static final String MOVIE_BASE_URI = "http://api.themoviedb.org/3/";
+    public static final String IMAGE_BASE_URI = "https://image.tmdb.org/t/p/";
+    private static final String YOUTUBE_THUMB_PATH = "https://img.youtube.com/vi/";
+
+    protected Retrofit retrofit;
+
+    protected MovieApi movieApi;
+
 
     public class JsonDecoder {
         public ArrayList<Movie> parseMovies(String string) throws JSONException {
@@ -177,6 +196,22 @@ public class Communicator implements AbstractMovieDataSource{
     public Communicator(String apiKey){
         this.apiKey = apiKey;
         this.inetQueryBuilder = new InetQueryBuilder(this.apiKey);
+
+        Type listType = new TypeToken<List<Movie>>(){}.getType();
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .enableComplexMapKeySerialization()
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeAdapter(listType, new MovieListDeserializer())
+                .create();
+
+        this.retrofit =
+                new Retrofit.Builder().baseUrl(MOVIE_BASE_URI)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        this.movieApi = retrofit.create(MovieApi.class);
     }
 
     public ArrayList<Movie> getMovies(int page, InetQueryBuilder.SortOrder sortOrder) throws IOException, JSONException {
@@ -199,25 +234,8 @@ public class Communicator implements AbstractMovieDataSource{
     }
 
     public Observable<List<Movie>> getMovies(int page, int perPage, String query){
-        Log.d("requested_page", String.valueOf(page));
-        return Observable.create(emitter -> {
-            Log.d("request_sent", "true");
-            Response response = this.okHttpClient
-                    .newCall(
-                            new Request.Builder().url(this.inetQueryBuilder.getMoviesList(InetQueryBuilder.SortOrder.HIGHEST_RATED, page)).build()
-                    )
-                    .execute();
 
-            Log.d("response_err", response.code()+"");
-            Log.d("request_content", response.request().toString());
-
-            if(response.isSuccessful()){
-                //Log.d("response", response.body().string());
-                emitter.onNext(new JsonDecoder().parseMovies(response.body().string()));
-            } else {
-
-            }
-        });
+       return this.movieApi.getMovies("popular", this.apiKey, page);
     }
 
     public ArrayList<Review> getReviews(int movieId, int page) throws IOException, JSONException{

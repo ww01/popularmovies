@@ -5,6 +5,9 @@ import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import pl.fullstack.movies.db.contract.PopularMoviesContract;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -26,16 +29,26 @@ public class Movie implements Parcelable, IEntity<Movie> {
     @Id
     protected Long _id;
 
+    @SerializedName("id")
+    @Expose
     protected int TMDBId; // The Movie DataBase ID
 
+    @SerializedName("title")
+    @Expose
     protected String title;
 
+    @SerializedName("poster_path")
+    @Expose
     protected String image;
 
+    @SerializedName("overview")
+    @Expose
     protected String synopsis;
 
     protected boolean isFavourite = false;
 
+    @SerializedName("vote_average")
+    @Expose
     protected double rating;
 
     public Movie(){

@@ -8,7 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.Toast;
 
 import pl.fullstack.movies.adapter.MovieTrailersAdapter;
-import pl.fullstack.movies.helpers.ConnectivityHelper;
+import pl.fullstack.movies.net.helpers.ConnectivityHelper;
 import pl.fullstack.movies.task.MovieTrailersAsyncTask;
 import pl.fullstack.activity.R;
 

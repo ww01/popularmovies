@@ -19,10 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name="pl.fullstack.activity.MovieDetailActivity"></activity>
-        <provider
-            android:authorities="pl.fullstack.activity"
-            android:name="pl.fullstack.movies.db.provider.MovieContentProvider">
-        </provider>
+
     </application>
     <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="23" />
     <uses-permission android:name="android.permission.INTERNET" />

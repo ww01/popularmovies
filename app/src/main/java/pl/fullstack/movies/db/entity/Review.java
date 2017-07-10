@@ -12,10 +12,10 @@ import org.greenrobot.greendao.annotation.Id;
  */
 
 @Entity
-public class Review implements Parcelable, IEntity {
+public class Review implements Parcelable, IEntity<Review> {
 
     @Id
-    protected int id;
+    protected Long id;
 
     protected String TMDBId;
 
@@ -29,15 +29,15 @@ public class Review implements Parcelable, IEntity {
     public Review(){}
 
     public Review(Parcel in){
-        this.id = in.readInt();
+        this.id = in.readLong();
         this.TMDBId = in.readString();
         this.author = in.readString();
         this.content = in.readString();
         this.url = in.readString();
     }
 
-    @Generated(hash = 1578234358)
-    public Review(int id, String TMDBId, String author, String content,
+    @Generated(hash = 1449266083)
+    public Review(Long id, String TMDBId, String author, String content,
             String url) {
         this.id = id;
         this.TMDBId = TMDBId;
@@ -70,11 +70,11 @@ public class Review implements Parcelable, IEntity {
 
 
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

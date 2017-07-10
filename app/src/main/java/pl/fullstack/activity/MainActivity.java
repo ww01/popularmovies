@@ -6,11 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import pl.fullstack.movies.common.DataSourceType;
 import pl.fullstack.movies.fragment.MoviesListFragment;
-import pl.fullstack.movies.helpers.ConnectivityHelper;
+import pl.fullstack.movies.net.helpers.ConnectivityHelper;
 
 public class MainActivity extends AppCompatActivity {
 
