@@ -5,4 +5,6 @@
     <dimen name="movie_tile_padding">5dp</dimen>
     <dimen name="movie_tile_title_padding_vertical">7dp</dimen>
     <dimen name="movie_tile_title_padding_horizontal">5dp</dimen>
+
+    <dimen name="field_standard_padding">10dp</dimen>
 </resources>

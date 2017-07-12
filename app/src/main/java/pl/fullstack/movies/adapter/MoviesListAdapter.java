@@ -2,6 +2,8 @@ package pl.fullstack.movies.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import pl.fullstack.activity.MainActivity;
 import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.fragment.MoviesListFragment;
 import pl.fullstack.movies.net.InetQueryBuilder;
@@ -27,6 +31,12 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
 
     public static final String KEY = "NETWORK_MOVIES_LIST_ADAPTER";
 
+    Fragment fragment;
+
+    public MoviesListAdapter(Fragment fragment) {
+        this.fragment = fragment;
+    }
+
     @Override
     public MoviesListFragment.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -40,30 +50,23 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
     public void onBindViewHolder(final MoviesListFragment.ViewHolder holder, final int position) {
         if (position > this.movies.size())
             return;
-        holder.itemView.setVisibility(View.GONE);
         final Context ctx = holder.itemView.getContext();
         final Movie movie = this.movies.get(position);
         holder.title.setText(movie.getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), MovieDetailActivity.class);
-                intent.putExtra(Movie.KEY, movie);
-                ctx.startActivity(intent);
-            }
-        });
 
-        Picasso.with(holder.poster.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into(holder.poster, new Callback() {
-            @Override
-            public void onSuccess() {
-                holder.itemView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onError() {
+                if(ctx instanceof MainActivity){
+                    Intent intent = new Intent((MainActivity)ctx, MovieDetailActivity.class);
+                    intent.putExtra(Movie.KEY, movie);
+                    ((MainActivity)ctx).startActivityForResult(intent, MainActivity.ACTION_DETAILS_REQUEST_CODE);
+                }
 
             }
         });
+
+        Picasso.with(holder.poster.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into(holder.poster);
 
     }
 
@@ -90,8 +93,20 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
     }
 
     public void removeItem(Movie movie){
-        this.movies.remove(movie);
-        this.notifyDataSetChanged();
+        //this.movies.remove(movie);
+        int pos = -1;
+
+        for(Movie rm : this.movies){
+            if(movie.getTMDBId() == rm.getTMDBId()){
+                pos = this.movies.indexOf(rm);
+            }
+        }
+
+        if(pos > -1){
+            this.movies.remove(pos);
+            this.notifyDataSetChanged();
+        }
+
     }
 
     public void removeItems(List<Movie> movies){

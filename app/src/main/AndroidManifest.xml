@@ -8,17 +8,21 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:logo="@drawable/logo"
         >
 
-        <activity android:name="pl.fullstack.activity.MainActivity">
+        <activity android:name="pl.fullstack.activity.MainActivity"
+            android:theme="@style/AppTheme"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="pl.fullstack.activity.MovieDetailActivity"></activity>
+        <activity android:name="pl.fullstack.activity.MovieDetailActivity"
+            android:theme="@style/AppTheme"
+            />
 
     </application>
     <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="23" />

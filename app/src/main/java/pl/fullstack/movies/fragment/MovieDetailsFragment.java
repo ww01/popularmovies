@@ -1,29 +1,42 @@
 package pl.fullstack.movies.fragment;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import pl.fullstack.activity.MainActivity;
 import pl.fullstack.activity.R;
 import pl.fullstack.movies.adapter.MovieReviewsAdapter;
 import pl.fullstack.movies.adapter.MovieTrailersAdapter;
 import pl.fullstack.movies.db.contract.ContractUriBuilder;
 import pl.fullstack.movies.db.contract.PopularMoviesContract;
 import pl.fullstack.movies.db.entity.Movie;
+import pl.fullstack.movies.listener.ViewCoverListener;
 import pl.fullstack.movies.net.InetQueryBuilder;
 import pl.fullstack.movies.listener.FavouriteMovieListener;
 import pl.fullstack.movies.listener.ReviewsScrollListener;
@@ -64,59 +77,129 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment {
 
     protected boolean isFavedMovie = false;
     protected Movie movie;
+
+
+    @BindView(R.id.detail_favourite)
     protected FloatingActionButton favouriteView;
-    private static int LOADER_ID = 222;
+
+    @BindView(R.id.detail_poster)
+    protected ImageView posterSmall;
+
+    @BindView(R.id.detail_title)
+    protected TextView title;
+
+    @BindView(R.id.detail_rating)
+    protected TextView rating;
+
+    @BindView(R.id.detail_details)
+    protected TextView synopsis;
+
+
+    @BindView(R.id.details_trailers_list)
+    protected RecyclerView trailersRecycler;
+
+   // @BindView(R.id.detail_card_content)
+    //protected LinearLayout cardContent;
+
+    @BindView(R.id.detail_poster_container)
+    protected RelativeLayout posterWrapper;
+
+    @BindView(R.id.detail_poster_large)
+    protected ImageView posterLarge;
+
+    @BindView(R.id.details_close_poster_large)
+    protected ImageView posterLargeClose;
+
+    @BindView(R.id.detail_poster_large_container)
+    protected ViewGroup posterLargeContainer;
 
     @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState){
+       View layout =  inflater.inflate(R.layout.movie_detail, container, false);
+       ButterKnife.bind(this, layout);
+       return layout;
+   }
 
 
-       NestedScrollView layout = (NestedScrollView) inflater.inflate(R.layout.movie_detail, container, false);
+   @Override
+   public void onActivityCreated(Bundle state){
+       super.onActivityCreated(state);
 
        Bundle savedArg = this.getArguments();
 
 
        if(savedArg != null && savedArg.containsKey(Movie.KEY) && savedArg.getParcelable(Movie.KEY) instanceof Movie){
            this.movie = (Movie) savedArg.getParcelable(Movie.KEY);
+           this.isFavedMovie = this.movie.getIsFavourite();
+
+           this.title.setText(movie.getTitle());
+
+           //Picasso.with(this.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into((ImageView)layout.findViewById(R.id.detail_poster));
+           Picasso.with(this.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into(posterLarge);
+           Picasso.with(this.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into(posterSmall, new Callback() {
+               @Override
+               public void onSuccess() {
+                   posterSmall.post(new Runnable() {
+                       @Override
+                       public void run() {
+
+                           double ratio = 0.6666;
+                           LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) posterWrapper.getLayoutParams();
+                           layoutParams.width = (int) (posterWrapper.getMeasuredWidth() * ratio);
+                           layoutParams.height = (int) (posterWrapper.getMeasuredHeight() * ratio);
+
+                           posterWrapper.setLayoutParams(layoutParams);
+                           favouriteView.setVisibility(View.VISIBLE);
+                           posterWrapper.requestLayout();
+
+                       }
+                   });
+               }
+
+               @Override
+               public void onError() {
+
+               }
+           });
 
 
-           ((TextView)layout.findViewById(R.id.detail_title)).setText(movie.getTitle());
 
-           Picasso.with(this.getContext()).load(InetQueryBuilder.IMAGE_BASE_URI + "w500" + movie.getImage()).into((ImageView)layout.findViewById(R.id.detail_poster));
-           TextView rating = (TextView)layout.findViewById(R.id.detail_rating);
-           rating.setText(rating.getText() + ": " + movie.getRating());
-           ((TextView)layout.findViewById(R.id.detail_details)).setText(movie.getSynopsis());
 
-           RecyclerView reviewsList = (RecyclerView) layout.findViewById(R.id.details_reviews_list);
-           MovieReviewsAdapter reviewsAdapter = new MovieReviewsAdapter();
-           reviewsList.setAdapter(reviewsAdapter);
-           LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-           ReviewsScrollListener reviewsScrollListener = new ReviewsScrollListener(layoutManager, reviewsAdapter, movie.getTMDBId());
-           reviewsList.setLayoutManager(layoutManager);
-           reviewsList.addOnScrollListener(reviewsScrollListener);
-           reviewsScrollListener.loadInitialItems(this.getContext(), 1, reviewsList);
 
-           RecyclerView trailersList = (RecyclerView) layout.findViewById(R.id.details_trailers_list);
+
+
            LinearLayoutManager trailersLayout = new LinearLayoutManager(this.getContext());
            trailersLayout.setOrientation(LinearLayoutManager.HORIZONTAL);
-           trailersList.setLayoutManager(trailersLayout);
+           this.trailersRecycler.setLayoutManager(trailersLayout);
            MovieTrailersAdapter trailersAdapter = new MovieTrailersAdapter();
-           trailersList.setAdapter(trailersAdapter);
+           this.trailersRecycler.setAdapter(trailersAdapter);
            MovieTrailersAsyncTask trailersAsyncTask = new MovieTrailersAsyncTask();
            trailersAsyncTask.execute(new MovieTrailersAsyncTask.MovieTrailerTaskConfig(this.getString(R.string.themoviedb_api_key), movie.getTMDBId(), trailersAdapter));
 
-           this.favouriteView = ((FloatingActionButton) layout.findViewById(R.id.detail_favourite));
+
+           rating.setText(rating.getText() + ": " + movie.getRating());
+           this.synopsis.setText(movie.getSynopsis());
 
            if(this.isFavedMovie) {
                this.favouriteView.setImageResource(R.drawable.ic_clear_white_24dp);
            }
 
-           (favouriteView).setOnClickListener(new FavouriteMovieListener(movie));
+           this.favouriteView.setOnClickListener(new FavouriteMovieListener(movie));
+
+           this.posterLargeClose.setOnClickListener(new ViewCoverListener(this.posterLargeContainer));
+
+           this.posterSmall.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   MovieDetailsFragment.this.posterLargeContainer.setVisibility(View.VISIBLE);
+               }
+           });
 
        }
 
-       return layout;
    }
+
+
 
 
 }

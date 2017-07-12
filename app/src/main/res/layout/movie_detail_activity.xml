@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/details_holder"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/appBackground"
-    android:padding="20dp"
-    >
+    android:padding="20dp">
 
-    <!--fragment
-        android:name="com.test.movies.fragment.MovieDetailsFragment"
-        android:_id="@+_id/movie_details_fragment"
+
+
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/details_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent" />
 
-
-    </fragment-->
 
 </LinearLayout>

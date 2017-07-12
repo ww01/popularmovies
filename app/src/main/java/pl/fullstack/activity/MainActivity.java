@@ -1,17 +1,27 @@
 package pl.fullstack.activity;
 
+import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import pl.fullstack.movies.common.DataSourceType;
+import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.fragment.MoviesListFragment;
 import pl.fullstack.movies.net.helpers.ConnectivityHelper;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final int ACTION_DETAILS_REQUEST_CODE = 300;
+    public static final int ACTION_ITEM_ADD = 11;
+    public static final int ACTION_ITEM_REMOVE = 21;
+    public static final String ACTION_INTENT_CONTENT = "MODIFIED_MOVIE";
+    public static final String FAVOURITES_TAG = "USER_FAVOURITE";
 
     private class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
@@ -23,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-
 
             MoviesListFragment fragment = new MoviesListFragment();
             Bundle args = new Bundle();
@@ -47,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private FragmentPagerAdapter pagerAdapter;
+
+    protected Movie updatedItem;
+    protected int lastResultCode = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +101,60 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        
 
     }
 
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        Log.d("result_activity", "fragment restore");
+        Log.d("result_conditions_ok", String.valueOf(this.pagerAdapter != null && this.lastResultCode != -1));
+        Log.d("result_last_code", this.lastResultCode + "");
+
+        if(this.pagerAdapter != null && this.lastResultCode != -1){
+
+            if(this.lastResultCode == ACTION_ITEM_ADD){
+                ((MoviesListFragment)this.findFragmentByPosition(1)).addItem(this.updatedItem);
+            }
+            else if(this.lastResultCode == ACTION_ITEM_REMOVE){
+                ((MoviesListFragment)this.findFragmentByPosition(1)).removeItem(this.updatedItem);
+            } else {
+                Log.d("result_code_invoke_fail", String.valueOf(this.lastResultCode));
+            }
+
+            this.lastResultCode = -1;
+            this.updatedItem = null;
+        }
+    }
+
+
+    /**
+     *
+     * Note: due to absence of call to super() result will not be propagated to child fragments.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+
+        Log.d("result_code_activity", String.valueOf(resultCode) + " " + String.valueOf(data!=null));
+
+        if(data == null)
+            return;
+
+        this.lastResultCode = resultCode;
+        this.updatedItem = data.getParcelableExtra(MainActivity.ACTION_INTENT_CONTENT);
+    }
+
+
+    public Fragment findFragmentByPosition(int position) {
+        return getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:" + this.viewPager.getId() + ":"
+                        + this.pagerAdapter.getItemId(position));
+    }
 
 }

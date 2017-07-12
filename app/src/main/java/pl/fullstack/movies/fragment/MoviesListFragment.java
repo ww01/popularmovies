@@ -1,8 +1,11 @@
 package pl.fullstack.movies.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import pl.fullstack.activity.MainActivity;
 import pl.fullstack.activity.R;
 import pl.fullstack.movies.adapter.MoviesListAdapter;
 import pl.fullstack.movies.common.AbstractMovieDataSource;
@@ -66,7 +70,7 @@ public class MoviesListFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
-        this.adapter = new MoviesListAdapter();
+        this.adapter = new MoviesListAdapter(this);
 
         Bundle args = this.getArguments();
 
@@ -150,5 +154,47 @@ public class MoviesListFragment extends android.support.v4.app.Fragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+       // super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("result_called", "true");
+
+        if(requestCode != MainActivity.ACTION_DETAILS_REQUEST_CODE || data == null
+                || this.adapter == null || !data.hasExtra(MainActivity.ACTION_INTENT_CONTENT))
+            return;
+
+        Log.d("result_code", String.valueOf(resultCode));
+
+        Log.d("result_source_type", String.valueOf(this.dataSource instanceof MovieRepo ));
+
+        Movie updatedMovie = data.getParcelableExtra(MainActivity.ACTION_INTENT_CONTENT);
+
+
+        if(resultCode == MainActivity.ACTION_ITEM_ADD){
+            this.adapter.addItem(updatedMovie);
+            this.adapter.notifyDataSetChanged();
+        } else if(resultCode == MainActivity.ACTION_ITEM_REMOVE){
+            this.adapter.removeItem(updatedMovie);
+            this.adapter.notifyDataSetChanged();
+        }
+    }
+
+    public void addItem(Movie movie){
+        if(this.adapter != null){
+            this.adapter.addItem(movie);
+            Log.d("fragment_adapter", "updated");
+        } else
+            Log.d("fragment_adapter", "null");
+    }
+
+    public void removeItem(Movie movie){
+        if(this.adapter != null){
+            this.adapter.removeItem(movie);
+            Log.d("fragment_adapter", "updated");
+        } else
+            Log.d("fragment_adapter", "null");
+
+    }
 
 }

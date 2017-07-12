@@ -14,6 +14,8 @@ import org.greenrobot.greendao.annotation.Id;
 @Entity
 public class Review implements Parcelable, IEntity<Review> {
 
+    public static final String KEY= Review.class.getSimpleName();
+
     @Id
     protected Long id;
 

@@ -4,6 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+
     >
 
     <LinearLayout
@@ -18,7 +19,7 @@
 
         <ImageView
             android:id="@+id/details_close_poster_large"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_close_white_24dp"
             android:layout_gravity="right"
@@ -42,7 +43,9 @@
 
         <LinearLayout
             android:orientation="vertical" android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorTileBackground"
+            >
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -59,59 +62,85 @@
                     android:paddingTop="0dp"
                     >
 
-                    <RelativeLayout
-                        android:id="@+id/detail_poster_container"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:orientation="horizontal"
                         >
-                        <ImageView
-                            android:id="@+id/detail_poster"
-                            android:layout_width="match_parent"
+
+                        <RelativeLayout
+                            android:id="@+id/detail_poster_container"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/field_standard_padding"
-                            android:layout_gravity="center_horizontal"
-                            android:paddingTop="0dp"
-                            android:layout_marginTop="0dp"
-                            android:scaleType="fitCenter"
-                            android:adjustViewBounds="true"
-                            />
+                            android:layout_gravity="center"
+                            >
+                            <ImageView
+                                android:id="@+id/detail_poster"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/field_standard_padding"
+                                android:layout_gravity="center_horizontal"
+                                android:paddingTop="0dp"
+                                android:layout_marginTop="0dp"
+                                android:scaleType="fitCenter"
+                                android:adjustViewBounds="true"
+                                />
 
-                        <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/detail_favourite"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_check_white_24dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"
-                            />
+                            <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/detail_favourite"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_check_white_24dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
+                                />
 
 
-                    </RelativeLayout>
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content">
 
 
-                    <TextView
-                        android:id="@+id/detail_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorTileTitle"
-                        android:paddingBottom="@dimen/field_standard_padding"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                        />
+                            <TextView
+                                android:id="@+id/detail_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorTileTitle"
+                                android:paddingBottom="@dimen/field_standard_padding"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                                />
 
-                    <TextView
-                        android:id="@+id/detail_rating"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rating_label"
-                        />
+                            <TextView
+                                android:id="@+id/detail_rating"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/rating_label"
+                                />
 
-                    <TextView
-                        android:id="@+id/detail_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/detail_details"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+
+
+
+
+
 
                 </LinearLayout>
 

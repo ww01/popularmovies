@@ -2,11 +2,12 @@
 <resources>
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#EF526C</color>
+    <color name="colorAccent">#FECB00</color>
     <color name="colorTileTitle">#EEEEEE</color>
-    <color name="appBackground">#111111</color>
-    <color name="colorTileBackground">#000000</color>
+    <color name="appBackground">#000000</color>
+    <color name="colorTileBackground">#070707</color>
     <color name="colorFontPrimary">#FFFFFF</color>
+    <color name="colorSeparator">#2E332F</color>
 
 
 </resources>

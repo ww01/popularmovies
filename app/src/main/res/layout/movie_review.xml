@@ -5,16 +5,17 @@
     android:layout_height="wrap_content"
     android:background="@drawable/border_bottom"
     android:layout_gravity="center"
-    android:layout_marginTop="15dp"
-    android:layout_marginBottom="15dp"
+
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="10sp"
-        android:paddingTop="10sp"
+        android:paddingBottom="@dimen/field_standard_padding"
+        android:paddingTop="@dimen/field_standard_padding"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         >
 
         <TextView
