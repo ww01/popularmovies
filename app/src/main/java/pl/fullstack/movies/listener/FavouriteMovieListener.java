@@ -3,10 +3,14 @@ package pl.fullstack.movies.listener;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
+
+import pl.fullstack.activity.LoginActivity;
 import pl.fullstack.activity.MainActivity;
 import pl.fullstack.movies.db.dao.MovieRepo;
 import pl.fullstack.movies.db.entity.DaoSession;
@@ -14,6 +18,7 @@ import pl.fullstack.movies.db.entity.Movie;
 
 import pl.fullstack.movies.db.session.DbSession;
 import pl.fullstack.popularmovies.R;
+import pl.fullstack.security.Helper;
 
 /**
  * Created by waldek on 13.05.17.
@@ -23,8 +28,11 @@ public class FavouriteMovieListener implements View.OnClickListener {
 
     protected Movie movie;
 
-    public FavouriteMovieListener(Movie movie) {
+    WeakReference<Fragment> fragment;
+
+    public FavouriteMovieListener(Movie movie, Fragment fragment) {
         this.movie = movie;
+        this.fragment = new WeakReference<Fragment>(fragment);
     }
 
     @Override
@@ -35,6 +43,16 @@ public class FavouriteMovieListener implements View.OnClickListener {
 
         Movie found = repo.getByTmdbId(this.movie.getTMDBId());
 
+        Intent intent = new Intent(context, LoginActivity.class);
+
+        //context.startActivity(intent);
+        if(!Helper.isLoggedIn(context)) {
+            if(this.fragment.get() != null)
+                this.fragment.get().startActivity(intent);
+            return;
+        }
+
+        
         String toastText = "";
         if (found != null) {
             dbSession.getMovieDao().delete(found);

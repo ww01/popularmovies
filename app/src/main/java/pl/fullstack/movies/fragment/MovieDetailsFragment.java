@@ -168,7 +168,7 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment {
                this.favouriteView.setImageResource(R.drawable.ic_clear_white_24dp);
            }
 
-           this.favouriteView.setOnClickListener(new FavouriteMovieListener(movie));
+           this.favouriteView.setOnClickListener(new FavouriteMovieListener(movie, this));
 
            this.posterLargeClose.setOnClickListener(new ViewCoverListener(this.posterLargeContainer));
 

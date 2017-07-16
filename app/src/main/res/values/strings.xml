@@ -30,4 +30,8 @@
     <string name="login_method_account">Account</string>
     <string name="login_method_fb">Facebook</string>
 
+    <string name="login_attempt_ok">Logged in successfully.</string>
+    <string name="login_attempt_cancel">Login cancelled.</string>
+    <string name="login_attempt_error">Login failed, please check username and password and try again.</string>
+
 </resources>
