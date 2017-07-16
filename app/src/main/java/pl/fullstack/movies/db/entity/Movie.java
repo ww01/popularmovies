@@ -13,7 +13,13 @@ import pl.fullstack.movies.db.contract.PopularMoviesContract;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.JoinEntity;
+import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.Transient;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.greenrobot.greendao.DaoException;
 
 
 /**
@@ -37,6 +43,7 @@ public class Movie implements Parcelable, IEntity<Movie> {
     @Expose
     protected String title;
 
+
     @SerializedName("poster_path")
     @Expose
     protected String image;
@@ -50,6 +57,15 @@ public class Movie implements Parcelable, IEntity<Movie> {
     @SerializedName("vote_average")
     @Expose
     protected double rating;
+
+
+    @ToMany
+    @JoinEntity(
+            entity = MovieListMovie.class,
+            sourceProperty = "movieId",
+            targetProperty = "movieListId"
+    )
+    protected List<MovieList> movieLists;
 
     public Movie(){
     }
@@ -151,6 +167,14 @@ public class Movie implements Parcelable, IEntity<Movie> {
         }
     };
 
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+
+    /** Used for active entity operations. */
+    @Generated(hash = 1042217376)
+    private transient MovieDao myDao;
+
 
 
 
@@ -217,5 +241,76 @@ public class Movie implements Parcelable, IEntity<Movie> {
 
     public void setIsFavourite(boolean isFavourite) {
         this.isFavourite = isFavourite;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 692249141)
+    public List<MovieList> getMovieLists() {
+        if (movieLists == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            MovieListDao targetDao = daoSession.getMovieListDao();
+            List<MovieList> movieListsNew = targetDao._queryMovie_MovieLists(_id);
+            synchronized (this) {
+                if (movieLists == null) {
+                    movieLists = movieListsNew;
+                }
+            }
+        }
+        return movieLists;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1782151540)
+    public synchronized void resetMovieLists() {
+        movieLists = null;
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 215161401)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getMovieDao() : null;
     }
 }

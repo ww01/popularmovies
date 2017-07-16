@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import pl.fullstack.movies.adapter.DetailsViewPagerAdapter;
 import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.fragment.MovieDetailsFragment;
+import pl.fullstack.popularmovies.R;
 
 /**
  * Created by waldek on 15.04.17.

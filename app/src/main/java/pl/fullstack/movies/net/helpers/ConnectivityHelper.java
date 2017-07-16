@@ -5,7 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
-import pl.fullstack.activity.R;
+import pl.fullstack.popularmovies.R;
+
 
 /**
  * Created by waldek on 03.04.17.

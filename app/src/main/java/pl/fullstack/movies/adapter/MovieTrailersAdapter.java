@@ -15,7 +15,8 @@ import com.squareup.picasso.Picasso;
 import pl.fullstack.movies.db.entity.Trailer;
 import pl.fullstack.movies.fragment.MovieDetailsFragment;
 import pl.fullstack.movies.net.InetQueryBuilder;
-import pl.fullstack.activity.R;
+import pl.fullstack.popularmovies.R;
+
 
 import java.util.ArrayList;
 
@@ -88,7 +89,6 @@ public class MovieTrailersAdapter extends RecyclerView.Adapter<MovieDetailsFragm
                 @Override
                 public void onError() {
                     holder.itemView.setVisibility(View.VISIBLE);
-                    Log.d(MovieTrailersAdapter.this.getClass().getSimpleName(), "Cover image load failed.");
                 }
             });
     }

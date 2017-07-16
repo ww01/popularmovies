@@ -12,11 +12,11 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pl.fullstack.activity.R;
 import pl.fullstack.movies.adapter.MovieReviewsAdapter;
 import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.db.entity.Review;
 import pl.fullstack.movies.listener.ReviewsScrollListener;
+import pl.fullstack.popularmovies.R;
 
 /**
  * Created by waldek on 11.07.17.

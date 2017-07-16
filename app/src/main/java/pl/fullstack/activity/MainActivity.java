@@ -8,12 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import pl.fullstack.movies.common.DataSourceType;
 import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.fragment.MoviesListFragment;
 import pl.fullstack.movies.net.helpers.ConnectivityHelper;
+import pl.fullstack.popularmovies.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -110,9 +110,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
 
-        Log.d("result_activity", "fragment restore");
-        Log.d("result_conditions_ok", String.valueOf(this.pagerAdapter != null && this.lastResultCode != -1));
-        Log.d("result_last_code", this.lastResultCode + "");
+
 
         if(this.pagerAdapter != null && this.lastResultCode != -1){
 
@@ -122,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             else if(this.lastResultCode == ACTION_ITEM_REMOVE){
                 ((MoviesListFragment)this.findFragmentByPosition(1)).removeItem(this.updatedItem);
             } else {
-                Log.d("result_code_invoke_fail", String.valueOf(this.lastResultCode));
+
             }
 
             this.lastResultCode = -1;
@@ -140,8 +138,6 @@ public class MainActivity extends AppCompatActivity {
      * @param data
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-
-        Log.d("result_code_activity", String.valueOf(resultCode) + " " + String.valueOf(data!=null));
 
         if(data == null)
             return;

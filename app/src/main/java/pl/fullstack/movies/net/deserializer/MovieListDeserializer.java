@@ -1,7 +1,5 @@
 package pl.fullstack.movies.net.deserializer;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -25,10 +23,8 @@ public class MovieListDeserializer implements JsonDeserializer<List<Movie>> {
     public List<Movie> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         ArrayList<Movie> movies = new ArrayList<>();
 
-        Log.d("deserialization", "start");
         JsonArray content = json.getAsJsonObject().get("results").getAsJsonArray();
 
-        Log.d("json_content", content.toString());
 
         if(content == null || content.size() == 0)
             return movies;

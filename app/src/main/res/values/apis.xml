@@ -2,5 +2,8 @@
 <resources>
 
     <string name="themoviedb_api_key">1066dd96b5ee65a6e320d2ad09605504</string>
+    <string name="facebook_app_id">120880168531056</string>
+    <string name="fb_login_protocol_scheme">fb120880168531056</string>
+
 
 </resources>

@@ -5,9 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import pl.fullstack.activity.R;
+
 import pl.fullstack.movies.db.entity.Review;
 import pl.fullstack.movies.fragment.MovieDetailsFragment;
+import pl.fullstack.popularmovies.R;
 
 
 import java.util.ArrayList;

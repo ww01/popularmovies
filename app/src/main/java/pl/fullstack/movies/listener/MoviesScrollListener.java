@@ -61,11 +61,6 @@ public class MoviesScrollListener extends EndlessRecyclerViewScrollListener {
 
         Observable<List<Movie>> movieObservable = this.dataSource.getMovies(page, 30, this.query);
 
-        /*movieObservable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread()).subscribe(res -> {
-            this.adapter.addItems(res);
-            Log.d("num_res", res.size()+"");
-        }); */
-
         movieObservable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread()).subscribeWith(new Observer<List<Movie>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -79,11 +74,7 @@ public class MoviesScrollListener extends EndlessRecyclerViewScrollListener {
 
             @Override
             public void onError(@NonNull Throwable e) {
-
-                if(e instanceof HttpException){
-                    Log.d("rx_error", ((HttpException)e).response().toString());
-                }
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
             @Override

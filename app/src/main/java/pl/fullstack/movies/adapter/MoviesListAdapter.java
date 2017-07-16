@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import pl.fullstack.activity.MainActivity;
@@ -17,7 +16,7 @@ import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.fragment.MoviesListFragment;
 import pl.fullstack.movies.net.InetQueryBuilder;
 import pl.fullstack.activity.MovieDetailActivity;
-import pl.fullstack.activity.R;
+import pl.fullstack.popularmovies.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +92,6 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListFragment.V
     }
 
     public void removeItem(Movie movie){
-        //this.movies.remove(movie);
         int pos = -1;
 
         for(Movie rm : this.movies){

@@ -25,12 +25,46 @@
 #-renamesourcefileattribute SourceFile
 
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
--dontnote retrofit2.Platform
-# Platform used when running on Java 8 VMs. Will not be used at runtime.
--dontwarn retrofit2.Platform$Java8
-# Retain generic type information for use by reflection by converters and adapters.
 -keepattributes Signature
-# Retain declared checked exceptions for use by a Proxy instance.
--keepattributes Exceptions
+-keepattributes *Annotation*
+-keep class org.greenrobot.** { *; }
+-keep class com.squareup.** { *; }
+#-keep class dagger.** { *; }
+-keep class okio.** { *; }
+-keep class retrofit2.** { *; }
+# greendao rules below
+
+
+#-libraryjars libs/greendao-3.2.2.jar
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
+-dontwarn org.greenrobot.greendao.database.**
+
+#rxjava rules below
+-keepattributes *Annotation*
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+
+-dontwarn rx.**
+-keep class rx.**
+-dontwarn com.squareup.okhttp.**
+-keep class com.squareup.okhttp.**
+
+-dontwarn com.google.errorprone.annotations.**
+
 
 -dontwarn okio.**
+-keep class okio.**
+
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+
+-keep class pl.fullstack.movies.db.entity.**
+
+-dontwarn android.support.v7.**
+-keep class android.support.v7.** { *; }
+-keep interface android.support.v7.** { *; }

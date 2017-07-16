@@ -7,7 +7,8 @@ import android.widget.TextView;
 import pl.fullstack.movies.adapter.MovieReviewsAdapter;
 import pl.fullstack.movies.db.entity.Review;
 import pl.fullstack.movies.net.Communicator;
-import pl.fullstack.activity.R;
+import pl.fullstack.popularmovies.R;
+
 
 import org.json.JSONException;
 
@@ -52,7 +53,6 @@ public class MovieReviewsAsyncTask extends AsyncTask<MovieReviewsAsyncTask.Movie
 
         try {
             reviews = communicator.getReviews(config.movieId, config.page);
-            //Log.d("liczba recenzji: ", String.valueOf(reviews.size()));
         } catch (JSONException e) {
             e.printStackTrace();
             reviews = new ArrayList<Review>();

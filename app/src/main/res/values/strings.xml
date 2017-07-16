@@ -19,7 +19,15 @@
         <item>Popular</item>
     </string-array>
 
+    <string name="button_submit">Submit</string>
+
     <string name="detail_strip_overview">Overview</string>
     <string name="detail_strip_reviews">Reviews</string>
+
+    <string name="login_name">Login</string>
+    <string name="login_pass">Password</string>
+
+    <string name="login_method_account">Account</string>
+    <string name="login_method_fb">Facebook</string>
 
 </resources>

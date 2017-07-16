@@ -1,22 +1,13 @@
 package pl.fullstack.movies.fragment;
 
 
-import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,23 +16,17 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pl.fullstack.activity.MainActivity;
-import pl.fullstack.activity.R;
-import pl.fullstack.movies.adapter.MovieReviewsAdapter;
 import pl.fullstack.movies.adapter.MovieTrailersAdapter;
-import pl.fullstack.movies.db.contract.ContractUriBuilder;
-import pl.fullstack.movies.db.contract.PopularMoviesContract;
+import pl.fullstack.movies.db.dao.MovieRepo;
 import pl.fullstack.movies.db.entity.Movie;
+import pl.fullstack.movies.db.session.DbSession;
 import pl.fullstack.movies.listener.ViewCoverListener;
 import pl.fullstack.movies.net.InetQueryBuilder;
 import pl.fullstack.movies.listener.FavouriteMovieListener;
-import pl.fullstack.movies.listener.ReviewsScrollListener;
 import pl.fullstack.movies.task.MovieTrailersAsyncTask;
-
+import pl.fullstack.popularmovies.R;
 
 
 /**
@@ -163,11 +148,6 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment {
            });
 
 
-
-
-
-
-
            LinearLayoutManager trailersLayout = new LinearLayoutManager(this.getContext());
            trailersLayout.setOrientation(LinearLayoutManager.HORIZONTAL);
            this.trailersRecycler.setLayoutManager(trailersLayout);
@@ -180,7 +160,11 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment {
            rating.setText(rating.getText() + ": " + movie.getRating());
            this.synopsis.setText(movie.getSynopsis());
 
-           if(this.isFavedMovie) {
+           MovieRepo movieRepo = new MovieRepo(DbSession.getInstance(this.getContext()));
+
+           Movie inDb = movieRepo.getByTmdbId(movie.getTMDBId());
+
+           if(inDb != null) {
                this.favouriteView.setImageResource(R.drawable.ic_clear_white_24dp);
            }
 

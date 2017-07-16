@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,8 +11,9 @@ import pl.fullstack.activity.MainActivity;
 import pl.fullstack.movies.db.dao.MovieRepo;
 import pl.fullstack.movies.db.entity.DaoSession;
 import pl.fullstack.movies.db.entity.Movie;
-import pl.fullstack.activity.R;
+
 import pl.fullstack.movies.db.session.DbSession;
+import pl.fullstack.popularmovies.R;
 
 /**
  * Created by waldek on 13.05.17.
@@ -30,7 +30,6 @@ public class FavouriteMovieListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         final Context context = v.getContext();
-        Log.d("result_context_ok", String.valueOf(context instanceof  AppCompatActivity && movie != null));
         DaoSession dbSession = DbSession.getInstance(context);
         MovieRepo repo = new MovieRepo(dbSession);
 
@@ -68,7 +67,6 @@ public class FavouriteMovieListener implements View.OnClickListener {
     protected void removeItem(Movie movie, AppCompatActivity activity){
         if(this.movie == null)
             return;
-        Log.d("result_", "called item remove");
 
         Intent intent = new Intent();
         intent.putExtra(MainActivity.ACTION_INTENT_CONTENT, movie);
