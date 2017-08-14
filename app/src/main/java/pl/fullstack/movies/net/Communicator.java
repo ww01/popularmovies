@@ -26,6 +26,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import pl.fullstack.movies.net.deserializer.MovieListDeserializer;
+import pl.fullstack.movies.net.deserializer.MovieTrailersDeserializer;
 import pl.fullstack.movies.net.deserializer.ReviewsListDeserializer;
 import pl.fullstack.movies.net.service.MovieApi;
 import retrofit2.Retrofit;
@@ -118,13 +119,14 @@ public class Communicator implements AbstractMovieDataSource {
 
         Type listType = new TypeToken<List<Movie>>(){}.getType();
         Type reviewListType = new TypeToken<List<Review>>(){}.getType();
-
+        Type trailersListType = new TypeToken<List<Trailer>>(){}.getType();
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .enableComplexMapKeySerialization()
                 .excludeFieldsWithoutExposeAnnotation()
                 .registerTypeAdapter(listType, new MovieListDeserializer())
                 .registerTypeAdapter(reviewListType, new ReviewsListDeserializer())
+                .registerTypeAdapter(trailersListType, new MovieTrailersDeserializer())
                 .create();
 
         this.retrofit =
@@ -145,30 +147,10 @@ public class Communicator implements AbstractMovieDataSource {
         return this.movieApi.getReviews(movieId, page, this.apiKey);
     }
 
-    /*public ArrayList<Review> getReviews(int movieId, int page) throws IOException, JSONException{
 
 
-        Response response = this.okHttpClient
-                .newCall(new Request.Builder().url(this.inetQueryBuilder.getMovieReviews(movieId, page)).build())
-                .execute();
-
-        if(response.isSuccessful()){
-            return new JsonDecoder().parseReviews(response.body().string());
-        }
-
-        throw new IOException(response.code() + "");
-    } */
-
-    public ArrayList<Trailer> getTrailers(int movieId) throws IOException, JSONException {
-        Response response = this.okHttpClient
-                .newCall(new Request.Builder().url(this.inetQueryBuilder.getMovieTrailers(movieId)).build())
-                .execute();
-
-        if(response.isSuccessful()){
-            return new JsonDecoder().parseTrailers(response.body().string());
-        }
-
-        throw new IOException(String.valueOf(response.code()));
+    public Observable<List<Trailer>> getTrailers(int movieId) {
+        return this.movieApi.getTrailers(movieId, this.apiKey);
     }
 
 }

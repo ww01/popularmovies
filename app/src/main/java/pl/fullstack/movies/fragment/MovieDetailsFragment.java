@@ -1,6 +1,7 @@
 package pl.fullstack.movies.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,22 +14,29 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import pl.fullstack.movies.adapter.MovieTrailersAdapter;
 import pl.fullstack.movies.db.dao.MovieRepo;
 import pl.fullstack.movies.db.entity.Movie;
+import pl.fullstack.movies.db.entity.Trailer;
 import pl.fullstack.movies.db.session.DbSession;
 import pl.fullstack.movies.listener.ViewCoverListener;
+import pl.fullstack.movies.net.Communicator;
 import pl.fullstack.movies.net.InetQueryBuilder;
 import pl.fullstack.movies.listener.FavouriteMovieListener;
-import pl.fullstack.movies.task.MovieTrailersAsyncTask;
 import pl.fullstack.popularmovies.R;
 
 
@@ -108,6 +116,11 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment {
        return layout;
    }
 
+    protected boolean emptyListSearched =  false; // remember is search of "empty view" took place
+
+    @BindView(R.id.trailers_no_results)
+    protected View emptyList;
+
 
    @Override
    public void onActivityCreated(Bundle state){
@@ -156,8 +169,40 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment {
            this.trailersRecycler.setLayoutManager(trailersLayout);
            MovieTrailersAdapter trailersAdapter = new MovieTrailersAdapter();
            this.trailersRecycler.setAdapter(trailersAdapter);
-           MovieTrailersAsyncTask trailersAsyncTask = new MovieTrailersAsyncTask();
-           trailersAsyncTask.execute(new MovieTrailersAsyncTask.MovieTrailerTaskConfig(this.getString(R.string.themoviedb_api_key), movie.getTMDBId(), trailersAdapter));
+
+           Communicator communicator = new Communicator(this.getString(R.string.themoviedb_api_key));
+
+           communicator.getTrailers(this.movie.getTMDBId()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                   .subscribeWith(new Observer<List<Trailer>>() {
+                       @Override
+                       public void onSubscribe(@NonNull Disposable d) {
+
+                       }
+
+                       @Override
+                       public void onNext(@NonNull List<Trailer> trailers) {
+                           trailersAdapter.addTrailers(trailers);
+                       }
+
+                       @Override
+                       public void onError(@NonNull Throwable e) {
+                           final Context context = getContext();
+                           Toast.makeText(
+                                   context,
+                                   String.format(context.getString(R.string.error_loading_data), context.getString(R.string.data_type_trailer)),
+                                   Toast.LENGTH_LONG
+                           ).show();
+                           e.printStackTrace();
+                       }
+
+                       @Override
+                       public void onComplete() {
+                           if(trailersAdapter.getItemCount() == 0){
+                               emptyList.setVisibility(View.VISIBLE);
+                           } else
+                               emptyList.setVisibility(View.GONE);
+                       }
+                   });
 
 
            rating.setText(rating.getText() + ": " + movie.getRating());

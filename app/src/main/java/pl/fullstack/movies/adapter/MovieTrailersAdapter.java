@@ -19,6 +19,7 @@ import pl.fullstack.popularmovies.R;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by waldek on 07.05.17.
@@ -26,14 +27,10 @@ import java.util.ArrayList;
 
 public class MovieTrailersAdapter extends RecyclerView.Adapter<MovieDetailsFragment.MovieTrailerViewHolder> {
 
-    protected ArrayList<Trailer> trailers;
+    protected List<Trailer> trailers;
 
     public MovieTrailersAdapter(){
         this.trailers = new ArrayList<Trailer>();
-    }
-
-    public MovieTrailersAdapter(ArrayList<Trailer> trailers){
-        this.trailers = trailers;
     }
 
     @Override
@@ -49,14 +46,6 @@ public class MovieTrailersAdapter extends RecyclerView.Adapter<MovieDetailsFragm
 
         final Context context = holder.itemView.getContext();
 
-        /*if(position > this.trailers.size() || this.trailers.size() == 0){
-            TextView textView = new TextView(context);
-            textView.setText(context.getText(R.string.no_trailers));
-            ViewGroup parentContainer = (ViewGroup) holder.itemView.getParent().getParent();
-            (parentContainer).addView(textView);
-            parentContainer.removeView(parentContainer.findViewById(R.id.details_trailers_list));
-            return;
-        }*/
 
         final Trailer trailer = this.trailers.get(position);
         holder.itemView.setVisibility(View.GONE);
@@ -98,11 +87,11 @@ public class MovieTrailersAdapter extends RecyclerView.Adapter<MovieDetailsFragm
         return this.trailers.size();
     }
 
-    public ArrayList<Trailer> getTrailers() {
+    public List<Trailer> getTrailers() {
         return trailers;
     }
 
-    public void setTrailers(ArrayList<Trailer> trailers) {
+    public void setTrailers(List<Trailer> trailers) {
         this.trailers = trailers;
         this.notifyDataSetChanged();
     }
@@ -112,7 +101,7 @@ public class MovieTrailersAdapter extends RecyclerView.Adapter<MovieDetailsFragm
         this.notifyDataSetChanged();
     }
 
-    public void addTrailers(ArrayList<Trailer> trailers){
+    public void addTrailers(List<Trailer> trailers){
         this.trailers.addAll(trailers);
         this.notifyDataSetChanged();
     }

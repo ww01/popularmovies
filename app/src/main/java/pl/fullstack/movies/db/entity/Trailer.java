@@ -1,6 +1,9 @@
 package pl.fullstack.movies.db.entity;
 
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -10,8 +13,6 @@ import org.greenrobot.greendao.annotation.Generated;
 
 public class Trailer implements IEntity {
 
-
-    protected int id;
     /*
     "_id": "58f33221c3a368086700edf5",
       "iso_639_1": "en",
@@ -23,20 +24,30 @@ public class Trailer implements IEntity {
       "type": "Trailer"
      */
 
+    @Expose
+    @SerializedName("id")
     protected String TMDBId;
 
     protected String localeLang;
 
     protected String localeDialect;
 
+    @Expose
+    @SerializedName("key")
     protected String trailerKey;
 
+    @Expose
     protected String name;
 
+    @Expose
+    @SerializedName("site")
     protected String sourceSite;
 
+    @Expose
+    @SerializedName("size")
     protected int resolution;
 
+    @Expose
     protected String type;
 
     public Trailer(){}
@@ -54,7 +65,6 @@ public class Trailer implements IEntity {
 
     @Generated(hash = 1774890834)
     public Trailer(int id, String TMDBId, String localeLang, String localeDialect, String trailerKey, String name, String sourceSite, int resolution, String type) {
-        this.id = id;
         this.TMDBId = TMDBId;
         this.localeLang = localeLang;
         this.localeDialect = localeDialect;
@@ -66,14 +76,6 @@ public class Trailer implements IEntity {
     }
 
 
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getTMDBId() {
         return TMDBId;

@@ -151,6 +151,13 @@
 
                     </android.support.v7.widget.RecyclerView>
 
+                    <TextView
+                        android:id="@+id/trailers_no_results"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_trailers"
+                        android:layout_gravity="center"
+                        />
 
 
 

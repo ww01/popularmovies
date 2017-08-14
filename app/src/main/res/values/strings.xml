@@ -36,5 +36,6 @@
 
     <string name="error_loading_data">Error loading %s data.</string>
     <string name="data_type_review">review</string>
+    <string name="data_type_trailer">trailer</string>
 
 </resources>
