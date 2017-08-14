@@ -3,35 +3,43 @@ package pl.fullstack.movies.db.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * Created by waldek on 03.05.17.
  */
 
-@Entity
+
 public class Review implements Parcelable, IEntity<Review> {
 
     public static final String KEY= Review.class.getSimpleName();
 
-    @Id
-    protected Long id;
 
+
+    @Expose
+    @SerializedName("_id")
     protected String TMDBId;
 
+    @Expose
     protected String author;
 
+    @Expose
     protected String content;
 
+    @Expose
     protected String url;
 
 
     public Review(){}
 
     public Review(Parcel in){
-        this.id = in.readLong();
+
         this.TMDBId = in.readString();
         this.author = in.readString();
         this.content = in.readString();
@@ -41,7 +49,7 @@ public class Review implements Parcelable, IEntity<Review> {
     @Generated(hash = 1449266083)
     public Review(Long id, String TMDBId, String author, String content,
             String url) {
-        this.id = id;
+
         this.TMDBId = TMDBId;
         this.author = author;
         this.content = content;
@@ -72,13 +80,6 @@ public class Review implements Parcelable, IEntity<Review> {
 
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTMDBId() {
         return TMDBId;

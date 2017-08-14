@@ -26,6 +26,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import pl.fullstack.movies.net.deserializer.MovieListDeserializer;
+import pl.fullstack.movies.net.deserializer.ReviewsListDeserializer;
 import pl.fullstack.movies.net.service.MovieApi;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -47,89 +48,7 @@ public class Communicator implements AbstractMovieDataSource {
 
 
     public class JsonDecoder {
-        public ArrayList<Movie> parseMovies(String string) throws JSONException {
-            JSONObject object = new JSONObject(string);
 
-            if(!object.has("results"))
-                throw new JSONException("Malforrmed response received - no results present.");
-
-            return this.moviesFromJson(object.getJSONArray("results"));
-        }
-
-        protected ArrayList<Movie> moviesFromJson(JSONArray jsonArray) throws JSONException {
-            ArrayList<Movie> movies = new ArrayList<Movie>();
-
-
-            for(int i =0; i < jsonArray.length(); i ++){
-                JSONObject object = jsonArray.getJSONObject(i);
-                Movie movie = new Movie();
-                Iterator<String> keys = object.keys();
-
-                while (keys.hasNext()){ // iterate over retrieved json keys and match with "entity" fields
-                    String key = keys.next().toLowerCase();
-                    switch (key) {
-                        case "title":
-                            movie.setTitle(object.getString(key));
-                            break;
-                        case "vote_average":
-                            movie.setRating(object.getDouble(key));
-                            break;
-                        case "overview":
-                            movie.setSynopsis(object.getString(key));
-                            break;
-                        case "id":
-                            movie.setTMDBId(object.getInt(key));
-                            break;
-                        case "poster_path":
-                            movie.setImage(object.getString(key));
-                            break;
-                    }
-                }
-
-                movies.add(movie);
-            }
-
-            return movies;
-        }
-
-        public ArrayList<Review> parseReviews(String string) throws JSONException {
-            JSONObject object = new JSONObject(string);
-            if(!object.has("results"))
-                throw new JSONException("Malforrmed response received - no results present.");
-            return this.reviewsFromJson(object.getJSONArray("results"));
-
-        }
-
-        protected ArrayList<Review> reviewsFromJson(JSONArray jsonArray) throws JSONException{
-            ArrayList<Review> reviews = new ArrayList<Review>();
-
-            for(int i=0; i<jsonArray.length(); i++){
-                JSONObject object = jsonArray.getJSONObject(i);
-                Review review = new Review();
-                Iterator<String> keys = object.keys();
-
-                while(keys.hasNext()){
-                    String key = keys.next().toLowerCase();
-                    switch (key){
-                        case "id":
-                            review.setTMDBId(object.getString(key));
-                            break;
-                        case "author":
-                            review.setAuthor(object.getString(key));
-                            break;
-                        case "content":
-                            review.setContent(object.getString(key));
-                            break;
-                        case "url":
-                            review.setUrl(object.getString(key));
-                            break;
-                    }
-                }
-
-                reviews.add(review);
-            }
-            return reviews;
-        }
 
 
         public ArrayList<Trailer> parseTrailers(String string) throws JSONException{
@@ -198,12 +117,14 @@ public class Communicator implements AbstractMovieDataSource {
         this.inetQueryBuilder = new InetQueryBuilder(this.apiKey);
 
         Type listType = new TypeToken<List<Movie>>(){}.getType();
+        Type reviewListType = new TypeToken<List<Review>>(){}.getType();
 
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .enableComplexMapKeySerialization()
                 .excludeFieldsWithoutExposeAnnotation()
                 .registerTypeAdapter(listType, new MovieListDeserializer())
+                .registerTypeAdapter(reviewListType, new ReviewsListDeserializer())
                 .create();
 
         this.retrofit =
@@ -214,31 +135,17 @@ public class Communicator implements AbstractMovieDataSource {
         this.movieApi = retrofit.create(MovieApi.class);
     }
 
-    public ArrayList<Movie> getMovies(int page, InetQueryBuilder.SortOrder sortOrder) throws IOException, JSONException {
-
-
-
-        Response response = this.okHttpClient
-                .newCall(
-                        new Request.Builder().url(this.inetQueryBuilder.getMoviesList(sortOrder, page)).build()
-                )
-                .execute();
-
-        if(response.isSuccessful()){
-
-            return new JsonDecoder().parseMovies(response.body().string());
-
-        }
-
-        throw new IOException(response.code() + "");
-    }
 
     public Observable<List<Movie>> getMovies(int page, int perPage, String query){
 
        return this.movieApi.getMovies("popular", this.apiKey, page);
     }
 
-    public ArrayList<Review> getReviews(int movieId, int page) throws IOException, JSONException{
+    public Observable<List<Review>> getReviews(int movieId, int page) {
+        return this.movieApi.getReviews(movieId, page, this.apiKey);
+    }
+
+    /*public ArrayList<Review> getReviews(int movieId, int page) throws IOException, JSONException{
 
 
         Response response = this.okHttpClient
@@ -250,7 +157,7 @@ public class Communicator implements AbstractMovieDataSource {
         }
 
         throw new IOException(response.code() + "");
-    }
+    } */
 
     public ArrayList<Trailer> getTrailers(int movieId) throws IOException, JSONException {
         Response response = this.okHttpClient

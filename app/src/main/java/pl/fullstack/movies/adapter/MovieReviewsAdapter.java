@@ -1,6 +1,7 @@
 package pl.fullstack.movies.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import pl.fullstack.popularmovies.R;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by waldek on 05.05.17.
@@ -19,16 +21,11 @@ import java.util.ArrayList;
 
 public class MovieReviewsAdapter extends RecyclerView.Adapter<MovieDetailsFragment.MovieReviewViewHolder> {
 
-    protected ArrayList<Review> reviews;
+    protected List<Review> reviews;
 
     public MovieReviewsAdapter(){
         this.reviews = new ArrayList<Review>();
     }
-
-    public MovieReviewsAdapter(ArrayList<Review> reviews){
-        this.reviews = reviews;
-    }
-
 
     @Override
     public MovieDetailsFragment.MovieReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -50,16 +47,16 @@ public class MovieReviewsAdapter extends RecyclerView.Adapter<MovieDetailsFragme
         return this.reviews.size();
     }
 
-    public ArrayList<Review> getReviews() {
+    public List<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(ArrayList<Review> reviews) {
+    public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
         this.notifyDataSetChanged();
     }
 
-    public void addReviews(ArrayList<Review> reviews){
+    public void addReviews(List<Review> reviews){
         this.reviews.addAll(reviews);
         this.notifyDataSetChanged();
     }

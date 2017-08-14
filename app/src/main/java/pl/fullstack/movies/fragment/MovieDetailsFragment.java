@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import pl.fullstack.movies.adapter.MovieTrailersAdapter;
 import pl.fullstack.movies.db.dao.MovieRepo;
 import pl.fullstack.movies.db.entity.Movie;
@@ -162,11 +165,13 @@ public class MovieDetailsFragment extends android.support.v4.app.Fragment {
 
            MovieRepo movieRepo = new MovieRepo(DbSession.getInstance(this.getContext()));
 
-           Movie inDb = movieRepo.getByTmdbId(movie.getTMDBId());
+           movieRepo.getByTmdbId(movie.getTMDBId()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(subscriber->{
+                       this.favouriteView.setImageResource(R.drawable.ic_clear_white_24dp);
+                   }, subscriber->{
+                       Log.d("niezapisany", "true");
+                   });
 
-           if(inDb != null) {
-               this.favouriteView.setImageResource(R.drawable.ic_clear_white_24dp);
-           }
 
            this.favouriteView.setOnClickListener(new FavouriteMovieListener(movie, this));
 

@@ -25,12 +25,11 @@ import pl.fullstack.popularmovies.R;
 public class CommentsFragment extends Fragment {
 
 
-
-    protected ArrayList<Review> reviews;
-
     protected int tmdbId;
 
     protected boolean movieProvided = false;
+
+    protected MovieReviewsAdapter reviewsAdapter;
 
     @BindView(R.id.details_reviews_list)
     protected RecyclerView reviewsRecycler;
@@ -64,13 +63,16 @@ public class CommentsFragment extends Fragment {
             return;
 
 
-        MovieReviewsAdapter reviewsAdapter = new MovieReviewsAdapter();
+        reviewsAdapter = new MovieReviewsAdapter();
         this.reviewsRecycler.setAdapter(reviewsAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         ReviewsScrollListener reviewsScrollListener = new ReviewsScrollListener(layoutManager, reviewsAdapter, this.tmdbId);
         this.reviewsRecycler.setLayoutManager(layoutManager);
         this.reviewsRecycler.addOnScrollListener(reviewsScrollListener);
-        reviewsScrollListener.loadInitialItems(this.getContext(), 1, this.reviewsRecycler);
+
+        if(this.reviewsAdapter.getItemCount() == 0) {
+            reviewsScrollListener.onLoadMore(1, 0, this.reviewsRecycler);
+        }
 
     }
 

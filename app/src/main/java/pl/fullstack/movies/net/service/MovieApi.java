@@ -5,6 +5,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import pl.fullstack.movies.db.entity.Movie;
+import pl.fullstack.movies.db.entity.Review;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -21,4 +22,7 @@ public interface MovieApi {
 
     @GET("movie/{movieId}")
     Single<Movie> getMovie(@Path("movieId") long tmdbId, @Query("api_key") String apiKey);
+
+    @GET("movie/{movieId}/reviews")
+    Observable<List<Review>> getReviews(@Path("movieId") int movieId, @Query("page") int page,  @Query("api_key") String apiKey);
 }

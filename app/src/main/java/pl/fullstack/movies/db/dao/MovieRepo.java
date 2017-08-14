@@ -1,5 +1,6 @@
 package pl.fullstack.movies.db.dao;
 
+import io.reactivex.Single;
 import pl.fullstack.movies.common.AbstractMovieDataSource;
 import pl.fullstack.movies.db.entity.DaoSession;
 import pl.fullstack.movies.db.entity.Movie;
@@ -29,28 +30,22 @@ public class MovieRepo implements AbstractMovieDataSource {
     @Override
     public Observable<List<Movie>> getMovies(int page, int perPage, String type) {
 
-        if(page<0)
+        if (page < 0)
             throw new IllegalArgumentException("Page should not be a negative value.");
 
-        if(perPage <= 0)
+        if (perPage <= 0)
             throw new IllegalArgumentException("Number of items per page should be greater than 0");
 
-        QueryBuilder<Movie> movieQueryBuilder = this.daoSession.getMovieDao().queryBuilder().offset(page*perPage).limit(perPage);
+        QueryBuilder<Movie> movieQueryBuilder = this.daoSession.getMovieDao().queryBuilder().offset(page * perPage).limit(perPage);
         return Observable.fromArray(movieQueryBuilder.build().list());
     }
 
-    public Movie getByTmdbId(int tmdbId){
+    public Single<Movie> getByTmdbId(int tmdbId) {
+        return Single.create(emitter -> {
+            QueryBuilder<Movie> movieQuery = this.daoSession.getMovieDao().queryBuilder().where(MovieDao.Properties.TMDBId.eq("?"));
 
-        Movie movie = null;
-        QueryBuilder<Movie> movieQuery = this.daoSession.getMovieDao().queryBuilder().where(MovieDao.Properties.TMDBId.eq("?"));
-
-        try {
-            movie = movieQuery.build().setParameter(0, tmdbId).unique();
-        } catch(DaoException e){
-            e.printStackTrace();
-        }
-
-        return movie;
+            emitter.onSuccess(movieQuery.build().setParameter(0, tmdbId).unique());
+        });
     }
 
 }
