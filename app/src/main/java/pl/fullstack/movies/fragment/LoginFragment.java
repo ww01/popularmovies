@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import com.facebook.login.widget.LoginButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.fullstack.popularmovies.R;
-import pl.fullstack.security.Helper;
 
 /**
  * Created by waldek on 16.07.17.
@@ -56,7 +54,6 @@ public class LoginFragment extends Fragment {
         this.fbLoginButton.registerCallback(this.fbCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Helper.setupLoginToken(context, loginResult.getAccessToken().getToken());
                 Toast.makeText(context, R.string.login_attempt_ok, Toast.LENGTH_LONG).show();
             }
 

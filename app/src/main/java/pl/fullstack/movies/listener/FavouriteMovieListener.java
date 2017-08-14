@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
-import pl.fullstack.activity.LoginActivity;
 import pl.fullstack.activity.MainActivity;
 import pl.fullstack.movies.db.dao.MovieRepo;
 import pl.fullstack.movies.db.entity.DaoSession;
@@ -18,7 +17,6 @@ import pl.fullstack.movies.db.entity.Movie;
 
 import pl.fullstack.movies.db.session.DbSession;
 import pl.fullstack.popularmovies.R;
-import pl.fullstack.security.Helper;
 
 /**
  * Created by waldek on 13.05.17.
@@ -43,14 +41,8 @@ public class FavouriteMovieListener implements View.OnClickListener {
 
         Movie found = repo.getByTmdbId(this.movie.getTMDBId());
 
-        Intent intent = new Intent(context, LoginActivity.class);
 
-        //context.startActivity(intent);
-        if(!Helper.isLoggedIn(context)) {
-            if(this.fragment.get() != null)
-                this.fragment.get().startActivity(intent);
-            return;
-        }
+
 
         
         String toastText = "";

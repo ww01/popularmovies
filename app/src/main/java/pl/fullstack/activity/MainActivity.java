@@ -14,7 +14,6 @@ import pl.fullstack.movies.db.entity.Movie;
 import pl.fullstack.movies.fragment.MoviesListFragment;
 import pl.fullstack.movies.net.helpers.ConnectivityHelper;
 import pl.fullstack.popularmovies.R;
-import pl.fullstack.security.Helper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -156,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onPause(){
         super.onPause();
-        Helper.logout(this);
     }
 
 }

@@ -41,10 +41,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="pl.fullstack.activity.LoginActivity"
-            android:theme="@style/AppTheme"
-            />
-
 
     </application>
     <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="23" />
