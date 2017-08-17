@@ -40,74 +40,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Communicator implements AbstractMovieDataSource {
 
     public static final String MOVIE_BASE_URI = "http://api.themoviedb.org/3/";
-    public static final String IMAGE_BASE_URI = "https://image.tmdb.org/t/p/";
-    private static final String YOUTUBE_THUMB_PATH = "https://img.youtube.com/vi/";
 
     protected Retrofit retrofit;
 
     protected MovieApi movieApi;
 
-
-    public class JsonDecoder {
-
-
-
-        public ArrayList<Trailer> parseTrailers(String string) throws JSONException{
-            JSONObject object = new JSONObject(string);
-
-            if(!object.has("results"))
-                throw new JSONException("Malforrmed response received - no results present.");
-            return this.trailersFromJson(object.getJSONArray("results"));
-        }
-
-        protected ArrayList<Trailer> trailersFromJson(JSONArray jsonArray) throws JSONException {
-            ArrayList<Trailer> trailers = new ArrayList<Trailer>();
-
-            for(int i=0; i < jsonArray.length(); i++){
-                JSONObject object = jsonArray.getJSONObject(i);
-                Trailer trailer = new Trailer();
-                Iterator<String> keys = object.keys();
-
-                while (keys.hasNext()) {
-                    String key = keys.next();
-
-                    switch (key) {
-                       case "id":
-                           trailer.setTMDBId(object.getString(key));
-                           break;
-                       case "iso_639_1":
-                           trailer.setLocaleLang(object.getString(key));
-                           break;
-                       case "iso_3166_1":
-                           trailer.setLocaleDialect(object.getString(key));
-                           break;
-                       case "key":
-                           trailer.setTrailerKey(object.getString(key));
-                           break;
-                       case "name":
-                           trailer.setName(object.getString(key));
-                           break;
-                       case "site":
-                           trailer.setSourceSite(object.getString(key));
-                           break;
-                       case "size":
-                           trailer.setResolution(object.getInt(key));
-                           break;
-                       case "type":
-                           trailer.setType(object.getString(key));
-                           break;
-                    }
-
-                }
-
-                trailers.add(trailer);
-            }
-
-            return trailers;
-        }
-    }
-
-    protected OkHttpClient okHttpClient = new OkHttpClient();
 
     protected String apiKey;
 

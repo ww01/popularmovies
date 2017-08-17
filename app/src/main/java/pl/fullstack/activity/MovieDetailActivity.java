@@ -43,8 +43,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         Movie movie = args.getParcelable(Movie.KEY);
 
-        HashMap<Integer, String > tabNames = new HashMap<>();
-
         this.detailsViewPager.setAdapter(new DetailsViewPagerAdapter(getSupportFragmentManager(), movie));
 
 
